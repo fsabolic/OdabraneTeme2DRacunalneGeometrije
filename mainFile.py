@@ -1,5 +1,4 @@
-from presjeksegmenata import *
+from tockaupoligonu import *
 
-v_presjek_segmenata_test(10)
-
+v_tocka_u_poligonu_test(1000)
 plt.show()
