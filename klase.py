@@ -1,3 +1,5 @@
+import math
+
 class Tocka:
     def __init__(self, x, y):
         self.x = x
@@ -5,6 +7,9 @@ class Tocka:
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
+
+    def __hash__(self):
+        return hash(self.x+self.y)
 
     def __add__(self, other):
         return Tocka(self.x + other.x, self.y + other.y)
@@ -202,6 +207,9 @@ class Vektor:
 
     def vektorski_produkt(self, other):
         return (self.i) * (other.j) - (other.i) * (self.j)
+
+    def kut_izmedu_vektora(self, other):
+        return math.acos(self.skalarni_produkt(other) / (self.duljina() * other.duljina()))
 
 class Poligon:
 
