@@ -1,4 +1,5 @@
 import math
+from crtanje import *
 
 class Tocka:
     def __init__(self, x, y):
@@ -6,7 +7,9 @@ class Tocka:
         self.y = y
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
+        if(self.x==None or self.y==None or other.x==None or other.y==None):
+            return self.x == other.x and self.y == other.y
+        return abs(self.x-other.x)<0.0000000001 and abs(self.y-other.y)<0.0000000001
 
     def __hash__(self):
         return hash(self.x+self.y)
@@ -68,21 +71,20 @@ class Tocka:
 # ukoliko su stranica i dužina 'duzina_za_presjek' paralelne, provjerava se pripada li dana točka 'self' toj stranici poligona ili je točka 'self' jedna od vrhova poligona
 # na kraju se provjerava je li broj sjecišta paran (točka je van poligona) ili neparan (točka je u poligonu)
 #[Computational Geometry: An Introduction, 41. str]
-    def pripada_poligonu(self,poligon):
-        duzina_za_presjek = Duzina(self, Tocka(poligon.max_x() + 1, self.y))
+    def pripada_poligonu(self, poligon):
+        duzina_za_presjek = Duzina(self, Tocka(poligon.max_x() + 0.0000001, self.y))
         skup_stranica_poligona = poligon.u_duzine()
         sjecista = 0
         for i in skup_stranica_poligona:
-            if (not (i.u_vektor() // duzina_za_presjek.u_vektor())):
+            if (self.pripada_duzini(i) or self in poligon.tocke):
+                return 0
+            elif (not (i.u_vektor() // duzina_za_presjek.u_vektor())):
                 S = duzina_za_presjek.sjeciste(i)
                 if (S != Tocka(None, None)):
                     if ((S in poligon.tocke and S.y == i.manja_oridnata()) or (S not in poligon.tocke)):
                         sjecista += 1
-            else:
-                if (self.pripada_duzini(i) or self in poligon.tocke):
-                    return True
 
-        return sjecista % 2 != 0
+        return 1 + (sjecista % 2 == 0) * -2
 
 class Duzina:
     def __init__(self, A, B):
@@ -223,6 +225,86 @@ class Poligon:
     def broj_tocaka(self):
         return len(self.tocke)
 
+    def bool_operacije(self, other, operacija):
+        # 1|. Promijena orijentacije po potrebi
+        if (operacija == -1):
+            fragmenti_za_zadrzati_self = -1
+            fragmenti_za_zadrzati_other = 1
+            if (self.orijentacija() == other.orijentacija()):
+                self.promijeni_orijentaciju()
+
+        elif (operacija == 0):
+            fragmenti_za_zadrzati_self = -1
+            fragmenti_za_zadrzati_other = -1
+            if (self.orijentacija() != other.orijentacija()):
+                self.promijeni_orijentaciju()
+
+        elif (operacija == 1):
+            fragmenti_za_zadrzati_self = 1
+            fragmenti_za_zadrzati_other = 1
+            if (self.orijentacija() != other.orijentacija()):
+                self.promijeni_orijentaciju()
+
+        # 2|. Klasifikacija točaka
+        pom_tocke_p_1 = [PomTocka(i, i.pripada_poligonu(other)) for i in self.tocke]
+        pom_tocke_p_2 = [PomTocka(i, i.pripada_poligonu(self)) for i in other.tocke]
+
+        # 3|. Pronalaženje sjecišta
+
+        razvrstane_tocke_p_1 = pom_tocke_sjecista(pom_tocke_p_1, pom_tocke_p_2)
+        razvrstane_tocke_p_2 = pom_tocke_sjecista(pom_tocke_p_2, pom_tocke_p_1)
+
+
+        pom_tocke_p_1 = razvrstane_tocke_p_1
+        pom_tocke_p_2 = razvrstane_tocke_p_2
+
+        # 4|. Klasifikacija edge fragmenata
+
+        razvrstani_fragmenti = tocke_u_fragmente(pom_tocke_p_1, other, fragmenti_za_zadrzati_self,operacija) + tocke_u_fragmente(
+            pom_tocke_p_2, self, fragmenti_za_zadrzati_other,operacija)
+
+
+        # 5|. Odabir i organizacija fragmenata
+        razvrstani_fragmenti = [i.duzina for i in razvrstani_fragmenti]
+
+        povezani_fragmenti = povezi_fragmente(razvrstani_fragmenti)
+
+        # 6|. Pretvorba fragmenata u tocke kako bi napravili poligone nastali "oduzimanjem" dvaju poligona
+        rjesenje = []
+
+        for i in povezani_fragmenti:
+            popis_razlika = []
+            for j in i:
+                    popis_razlika.append(j.A)
+            rjesenje.append(popis_razlika)
+
+        return rjesenje
+
+    def orijentacija(self):
+        zbroj = 0
+        br_tocaka = self.broj_tocaka()
+        for i in range(br_tocaka):
+            zbroj += (self.tocke[(i + 1) % br_tocaka].x - self.tocke[i % br_tocaka].x) * (
+                        self.tocke[(i + 1) % br_tocaka].y + self.tocke[i % br_tocaka].y)
+        return -1+(zbroj>0)*2
+
+    def promijeni_orijentaciju(self):
+        obrnuti_redoslijed_tocaka = []
+        br_tocaka=self.broj_tocaka()
+        for i in range(br_tocaka):
+            obrnuti_redoslijed_tocaka.append(self.tocke[(-i - 1) % br_tocaka])
+        self.tocke=obrnuti_redoslijed_tocaka
+        return Poligon(obrnuti_redoslijed_tocaka)
+
+    def __sub__(self, other):
+        return self.bool_operacije(other, -1)
+
+    def __add__(self, other):
+        return self.bool_operacije(other, 0)
+
+    def __mul__(self, other):
+        return self.bool_operacije(other, 1)
+
     def min_x(self):
         pom=self.tocke[0].x
         for i in self.tocke:
@@ -251,3 +333,91 @@ class Poligon:
                 pom=i.y
         return pom
 
+
+class PomTocka:
+    def __init__(p_1,tocka,polozaj):
+        p_1.tocka=tocka
+        p_1.polozaj=polozaj
+
+class PomDuzina:
+    def __init__(p_1,duzina,polozaj):
+        p_1.duzina=duzina
+        p_1.polozaj=polozaj
+
+
+
+def pom_tocke_sjecista(pom_tocke_p_1,pom_tocke_p_2):
+    br_p_1 = len(pom_tocke_p_1)
+    br_p_2 = len(pom_tocke_p_2)
+
+    razvrstane_tocke = []
+    for i in range(0, br_p_1):
+        tocka_1_p_1 = pom_tocke_p_1[i % br_p_1]
+        tocka_2_p_1 = pom_tocke_p_1[(i + 1) % br_p_1]
+        stranica_p_1 = Duzina(tocka_1_p_1.tocka, tocka_2_p_1.tocka)
+
+        pom_lista_tocaka = []
+        pom_lista_tocaka.append(tocka_1_p_1)
+        pom_lista_tocaka.append(tocka_2_p_1)
+
+        for j in range(0, br_p_2):
+            tocka_1_p_2 = pom_tocke_p_2[j % br_p_2]
+            tocka_2_p_2 = pom_tocke_p_2[(j + 1) % br_p_2]
+            stranica_p_2 = Duzina(tocka_1_p_2.tocka, tocka_2_p_2.tocka)
+
+            S = stranica_p_1.sjeciste(stranica_p_2)
+
+            if (S != Tocka(None, None)):
+                pom_lista_tocaka.append(PomTocka(S, 0))
+
+        pom_lista_tocaka = sorted(pom_lista_tocaka, key=lambda z: (z.tocka.x - pom_lista_tocaka[0].tocka.x) ** 2 + (
+                    z.tocka.y - pom_lista_tocaka[0].tocka.y) ** 2)
+        pom_lista_tocaka.pop(-1)
+
+        for j in pom_lista_tocaka:
+            razvrstane_tocke.append(j)
+
+    return razvrstane_tocke
+
+def tocke_u_fragmente(pom_tocke_p_1,p_2,trazeni_polozaj,operacija):
+    fragmenti = []
+    br_p_1=len(pom_tocke_p_1)
+    for i in range(br_p_1):
+        pom_tocka_1 = pom_tocke_p_1[i%br_p_1]
+        pom_tocka_2 = pom_tocke_p_1[(i+1)%br_p_1]
+        if(pom_tocka_1.tocka!=pom_tocka_2.tocka):
+            duzina=Duzina(pom_tocka_1.tocka,pom_tocka_2.tocka)
+            if(pom_tocka_1.polozaj==-1 or pom_tocka_2.polozaj==-1):
+                polozaj=-1
+            elif(pom_tocka_1.polozaj==1 or pom_tocka_2.polozaj==1):
+                polozaj=1
+            else:
+                medutocka=Tocka((pom_tocka_1.tocka.x+pom_tocka_2.tocka.x)/2,(pom_tocka_1.tocka.y+pom_tocka_2.tocka.y)/2)
+                polozaj=medutocka.pripada_poligonu(p_2)
+
+
+            nova_duzina=PomDuzina(duzina,polozaj)
+            if (nova_duzina not in fragmenti and polozaj==trazeni_polozaj or (polozaj==0 and operacija!=-1 and nova_duzina not in fragmenti)):
+                fragmenti.append(nova_duzina)
+    return fragmenti
+
+def povezi_fragmente(razvrstani_fragmenti):
+    povezani_fragmenti=[]
+    while (len(razvrstani_fragmenti) > 0):
+
+        novi_poligon = []
+        novi_poligon.append(razvrstani_fragmenti[0])
+
+        razvrstani_fragmenti.pop(razvrstani_fragmenti.index(novi_poligon[0]))
+
+        i = 0
+        while (i < len(razvrstani_fragmenti)):
+            if (abs(novi_poligon[-1].B.x - razvrstani_fragmenti[i].A.x) < 0.0001 and abs(
+                    novi_poligon[-1].B.y - razvrstani_fragmenti[i].A.y) < 0.0001):
+                novi_poligon.append(razvrstani_fragmenti[i])
+                razvrstani_fragmenti.pop(i)
+                i = -1
+            i += 1
+
+        povezani_fragmenti.append(novi_poligon)
+    return povezani_fragmenti

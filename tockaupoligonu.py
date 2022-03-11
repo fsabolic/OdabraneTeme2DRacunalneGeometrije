@@ -18,7 +18,7 @@ def v_tocka_u_poligonu(tocka,poligon):
     ax.fill([i.x for i in poligon.tocke], [i.y for i in poligon.tocke], facecolor="lightblue", edgecolor="blue")
     ax.scatter([i.x for i in poligon.tocke], [i.y for i in poligon.tocke],marker='.',color="blue")
     boja="black"
-    if(pripada):
+    if(pripada>-1):
         boja="red"
     ax.scatter(tocka.x, tocka.y, marker="o", color=boja)
 
@@ -40,7 +40,7 @@ def v_tocka_u_poligonu_test(br_tocaka):
 
     for i in range(0, br_tocaka):
         tocka = Tocka(random() * 100 % 20 - 10, random() * 100 % 20 - 10)
-        if (tocka.pripada_poligonu(poligon)):
+        if (tocka.pripada_poligonu(poligon)>-1):
             ax.scatter(tocka.x, tocka.y, marker="o", color="red")
         else:
             ax.scatter(tocka.x, tocka.y, marker="o", color="black")
