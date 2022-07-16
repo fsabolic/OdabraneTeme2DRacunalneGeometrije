@@ -41,6 +41,7 @@ class Tocka:
 # ako je kvadratna duljina == skalarni produkt, tada je v1==v2, a ako je kvadratna duljina veća, tada v2 pripada v1, odnosno točka pripada dužini
 # ako je skalarni produkt manji od 0 (negativna je) tada je točka izvan dane dužine (na 'lijevo')
 # ako je skalarni produkt veći od kvadratne duljine, tada je točka izvan dane dužine (na 'desno')
+# https://stackoverflow.com/questions/328107/how-can-you-determine-a-point-is-between-two-other-points-on-a-line-segment
     def pripada_duzini(self, duzina):
 
         if(self==duzina.A or self==duzina.B):
@@ -77,14 +78,14 @@ class Tocka:
         sjecista = 0
         for i in skup_stranica_poligona:
             if (self.pripada_duzini(i) or self in poligon.tocke):
-                return 0
+                return 0 #tu vraćamo nulu samo da se vidi da je točka "na rubu" poligona
             elif (not (i.u_vektor() // duzina_za_presjek.u_vektor())):
                 S = duzina_za_presjek.sjeciste(i)
                 if (S != Tocka(None, None)):
                     if ((S in poligon.tocke and S.y == i.manja_oridnata()) or (S not in poligon.tocke)):
                         sjecista += 1
 
-        return 1 + (sjecista % 2 == 0) * -2
+        return 1 + (sjecista % 2 == 0) * -2 #ovo vraća -1 ili 1, ovisi nalazi li se točka u poligonu ili ne
 
 class Duzina:
     def __init__(self, A, B):
@@ -225,6 +226,7 @@ class Poligon:
     def broj_tocaka(self):
         return len(self.tocke)
 
+    # [An algorithm for computing the union, intersection or difference of two polygons]
     def bool_operacije(self, other, operacija):
         # 1|. Promijena orijentacije po potrebi
         if (operacija == -1):
@@ -280,6 +282,7 @@ class Poligon:
 
         return rjesenje
 
+    # zašto ovo radi - [https://www.baeldung.com/cs/2d-polygon-area]
     def orijentacija(self):
         zbroj = 0
         br_tocaka = self.broj_tocaka()
