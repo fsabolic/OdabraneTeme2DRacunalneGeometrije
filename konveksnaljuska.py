@@ -39,7 +39,7 @@ def konveksna_ljuska(tocke):
         u = Duzina(l[p2], l[p1]).u_vektor()
         v = Duzina(l[p2], l[p3]).u_vektor()
 
-        if (v.vektorski_produkt(u) <= 0):
+        if (v.vektorski_produkt(u) <= 0): #ovdje sam uklonio <= i stavio samo < jer mi tak onda ulovi i kolinearne točke, ako nešta ne radi, probaj ovo vratit na <=
             l = [i for i in l if i != l[p2]]
             p1,p2,p3=p1-1,p2-1,p3-1
         else:

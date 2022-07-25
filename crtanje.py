@@ -4,10 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #koliko "visoko" idu x i y-os
-xmin, xmax, ymin, ymax = -10,10,-10,10
+xmin, xmax, ymin, ymax = -30,30,-30,30
 
 #koliko često se prikazuju brojevi na x i y-osi
-ticks_frequency = 1
+ticks_frequency = 10
 
 #veličina slike koja će se prikazati (u inčima)
 #vraća fig (predstavlja prozor koji prikazuje crtež) i os
@@ -46,4 +46,4 @@ ax.set_xticks(np.arange(xmin, xmax+1), minor=True)
 ax.set_yticks(np.arange(ymin, ymax+1), minor=True)
 
 #which - na koje linije se odnosi (na one koje izlaze iz x i y osi)
-ax.grid(which='both', color='grey', linewidth=1, linestyle='--', alpha=0.2)
+#ax.grid(which='both', color='grey', linewidth=1, linestyle='--', alpha=0.2)
