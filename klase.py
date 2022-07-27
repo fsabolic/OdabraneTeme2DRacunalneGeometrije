@@ -9,7 +9,7 @@ class Tocka:
     def __eq__(self, other):
         if(self.x==None or self.y==None or other.x==None or other.y==None):
             return self.x == other.x and self.y == other.y
-        return abs(self.x-other.x)<0.0000000001 and abs(self.y-other.y)<0.0000000001
+        return abs(self.x-other.x)<0.00001 and abs(self.y-other.y)<0.00001
 
     def __hash__(self):
         return hash(self.x+self.y)
@@ -73,7 +73,7 @@ class Tocka:
 # na kraju se provjerava je li broj sjecišta paran (točka je van poligona) ili neparan (točka je u poligonu)
 #[Computational Geometry: An Introduction, 41. str]
     def pripada_poligonu(self, poligon):
-        duzina_za_presjek = Duzina(self, Tocka(poligon.max_x() + 0.0000001, self.y))
+        duzina_za_presjek = Duzina(self, Tocka(poligon.max_x() + 0.0001, self.y))
         skup_stranica_poligona = poligon.u_duzine()
         sjecista = 0
         for i in skup_stranica_poligona:
@@ -147,6 +147,7 @@ class Duzina:
             else:
                 return Tocka(None,None)
 
+        vv = vektor_other.vektorski_produkt(vektor_self)
         t = (self.A.x * (other.B.y - other.A.y) + other.A.x * (self.A.y - other.B.y) + other.B.x * (other.A.y - self.A.y)) / (
             vektor_other.vektorski_produkt(vektor_self))
 
@@ -193,8 +194,8 @@ class Vektor:
                 return True
             else:
                 return False
-
-        return (self.i/other.i)*other.j==self.j
+        g = (self.i/other.i)*other.j
+        return abs((self.i/other.i)*other.j - self.j)<0.000001
 
     def __repr__(self):
         return "(%s , %s)" % (self.i, self.j)
@@ -336,6 +337,17 @@ class Poligon:
                 pom=i.y
         return pom
 
+    def __repr__(self):
+        string = ""
+        for t in self.tocke:
+            string+="(%s , %s) " % (t.x, t.y)
+        return string
+
+    def __str__(self):
+        string = ""
+        for t in self.tocke:
+            string += "(%s , %s) " % (t.x, t.y)
+        return string
 
 class PomTocka:
     def __init__(p_1,tocka,polozaj):

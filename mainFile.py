@@ -359,28 +359,28 @@ def udaljenost_tocke(tocka_a,tocka_b):
     return sqrt((tocka_a.x-tocka_b.x)**2+(tocka_a.y-tocka_b.y)**2)
 
 def generiraj_broj():
-    max =5
+    max = 2
     return int(random() * 1000 % 2*max - max)
 
+def kut360(vektor1,vektor2):
+    sp = vektor1.skalarni_produkt(vektor2)
+    det = vektor1.i*vektor2.j-vektor1.j*vektor2.i
+    kut =  atan2(det,sp)
+    if(kut < 0):
+
+        kut += 2*pi
+
+    return  kut
 
 class VoronoiCelija:
     def __init__(self, Tocka,Poligon):
         self.Tocka = Tocka
         self.Poligon = Poligon
 
+tocke = []
 
-
-tocke = [Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,8)]
-
-#tocke = [Tocka(2 , 2),  Tocka(1 , 1), Tocka(2 , 1),Tocka(1 , 3),]
-
-print("TOČKE PRIJE: ")
-print(tocke)
-tocke = list(set(tocke))
-
-print("TOČKE POSLIJE : ")
-print(tocke)
-
+while(len(tocke)<3):
+    tocke = [Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,21)]
 
 # tocke = [
 #
@@ -425,228 +425,304 @@ print(tocke)
 #tocke = [Tocka(5 , -7), Tocka(1 , -7), Tocka(-1 , -8), Tocka(-3 , -9), Tocka(6 , 2)]
 #tocke =  [ Tocka(5 , -3), Tocka(5 , 5),Tocka(5 , -8), Tocka(8 , 6), Tocka(-3 , 9)]
 
-
+#tocke = [Tocka(0 , -2), Tocka(1 , -2), Tocka(0 , -4), Tocka(-1 , 0), Tocka(-3 , 0), Tocka(-4 , -2), Tocka(-4 , -1), Tocka(3 , 4), Tocka(-4 , 4)]
 # tocke = [Tocka(-8 , 8), Tocka(-3 , -5), Tocka(7 , 2)]
 #
-# tocke = [Tocka(-4 , 0), Tocka(4 , 9), Tocka(2 , 4)]
+#tocke = [Tocka(-4 , 0), Tocka(4 , 9), Tocka(2 , 4)]
 #
-# tocke = [Tocka(9 , 0), Tocka(9 , 2), Tocka(-5 , 0)]
+#tocke = [Tocka(9 , 0), Tocka(9 , 2), Tocka(-5 , 0)]
 #
-# tocke = [Tocka(-1 , -7), Tocka(2 , 0), Tocka(7 , 4)]
+#tocke = [Tocka(-1 , -7), Tocka(2 , 0), Tocka(7 , 4)]
 #
-# tocke = [Tocka(8 , -5), Tocka(-5 , -6), Tocka(-4 , 3)]
+#tocke = [Tocka(8 , -5), Tocka(-5 , -6), Tocka(-4 , 3)]
 #
-# tocke = [Tocka(4 , 8), Tocka(-8 , -4), Tocka(5 , 2)]
+#tocke = [Tocka(4 , 8), Tocka(-8 , -4), Tocka(5 , 2)]
 #
-# tocke = [Tocka(6 , 4), Tocka(4 , -8), Tocka(-2 , 9)]
+#tocke = [Tocka(6 , 4), Tocka(4 , -8), Tocka(-2 , 9)]
 #
-# tocke = [Tocka(-4 , 4), Tocka(6 , -3), Tocka(-8 , 6)]
+#tocke = [Tocka(-4 , 4), Tocka(6 , -3), Tocka(-8 , 6)]
 #
 #
 #
-# tocke = [Tocka(3 , 1), Tocka(0 , 4), Tocka(0 , -2)]
+#tocke = [Tocka(3 , 1), Tocka(0 , 4), Tocka(0 , -2)]
 #
-#  tocke = [Tocka(-1 , 2), Tocka(0 , 3), Tocka(-2 , -1), Tocka(0 , -1)]
+#tocke = [Tocka(-1 , 2), Tocka(0 , 3), Tocka(-2 , -1), Tocka(0 , -1)]
 #
 #
 #  tocke = [ Tocka(0,1), Tocka(-2,0), Tocka(0,-3), Tocka(3,4)]
 #
-# tocke = [ Tocka(1,0), Tocka(3,3), Tocka(0,-3), Tocka(0,-5), Tocka(4,-5),]
+#tocke = [ Tocka(1,0), Tocka(3,3), Tocka(0,-3), Tocka(0,-5), Tocka(4,-5),]
 #
-# tocke = [Tocka(-3.1683908934753617 , -4.653706072281693), Tocka(-4.355690592880592 , 0.6006362024813825), Tocka(-0.9136761660038246 , 4.3713870698911705), Tocka(1.9514248983439302 , 3.7028994697220696), Tocka(1.7354732689213108 , 4.111435949275574), Tocka(5.004579181639201 , 3.56763219487857)]
-#
-#
-#
-tocke = [Tocka(5 , -8), Tocka(5 , -3), Tocka(5 , 5), Tocka(8 , 6), Tocka(-3 , 9)]
-#
-tocke = [Tocka(-2 , -3), Tocka(-9 , -1), Tocka(8 , -5), Tocka(-5 , 8), Tocka(-4 , 9)]
-#
-#tocke = [Tocka(5 , -7), Tocka(1 , -7), Tocka(-1 , -8), Tocka(-3 , -9), Tocka(6 , 2)]
-#
+#tocke = [Tocka(-3.1683908934753617 , -4.653706072281693), Tocka(-4.355690592880592 , 0.6006362024813825), Tocka(-0.9136761660038246 , 4.3713870698911705), Tocka(1.9514248983439302 , 3.7028994697220696), Tocka(1.7354732689213108 , 4.111435949275574), Tocka(5.004579181639201 , 3.56763219487857)]
+# #
+# #
+# #
+# tocke = [Tocka(5 , -8), Tocka(5 , -3), Tocka(5 , 5), Tocka(8 , 6), Tocka(-3 , 9)]
+# #
+# tocke = [Tocka(-2 , -3), Tocka(-9 , -1), Tocka(8 , -5), Tocka(-5 , 8), Tocka(-4 , 9)]
+# #
+# tocke = [Tocka(5 , -7), Tocka(1 , -7), Tocka(-1 , -8), Tocka(-3 , -9), Tocka(6 , 2)]
+# #
 #tocke = [Tocka(-7 , 5), Tocka(-2 , 6), Tocka(-6 , -1), Tocka(-7 , -2), Tocka(0 , 8), Tocka(3 , 3), Tocka(-9 , -9), Tocka(3 , -7)]
-#
-#tocke = [Tocka(-7 , -4), Tocka(0 , 5), Tocka(9 , -4), Tocka(9 , -7), Tocka(6 , 6)]
-#
+# #
+# tocke = [Tocka(-7 , -4), Tocka(0 , 5), Tocka(9 , -4), Tocka(9 , -7), Tocka(6 , 6)]
+# #
 #tocke = [Tocka(-1 , -2),Tocka(2 , -2), Tocka(1 , -1),  Tocka(0 , -1)]
-#
-#tocke = [Tocka(1 , 1), Tocka(2 , 0), Tocka(1 , -1), Tocka(2 , -1)]
+# #
+# tocke = [Tocka(1 , 1), Tocka(2 , 0), Tocka(1 , -1), Tocka(2 , -1)]
 
+#tocke = [Tocka(-1,0),Tocka(0,0),Tocka(-2,2),Tocka(-2,1),Tocka(0,2),Tocka(0,1),Tocka(-1,1),Tocka(-1,2),Tocka(-2,0),]
 
+#tocke = [Tocka(2 , 2),  Tocka(1 , 1), Tocka(2 , 1),Tocka(1 , 3),]
 
-print("PRVE TOČKE:",tocke)
+#tocke = [ Tocka(-3 , 0),Tocka(-1 , 0), Tocka (-4 , -2), Tocka(-4 , -1),Tocka(-4 , 4),Tocka(0 , -2),]
+#tocke = [  Tocka(-1 , 0),Tocka(0 , 0), Tocka(1 , 0),  Tocka(1 , 3),]
 
 
 #tocke = [Tocka(0,0),Tocka(1,0),Tocka(0,1),Tocka(1,1)]
 
+
+
+
+    # print("GENERIRANE TOČKE: ")
+    # for tocka in tocke:
+    #     print("\t",tocka)
+
+    tocke = list(set(tocke))
+    #tocke = [  Tocka(1 , 3), Tocka(-1 , 0),Tocka(0 , 0), Tocka(1 , 0), ]
+
+    # print("\n'OČIŠĆENE' TOČKE: ")
+    # for tocka in tocke:
+    #     print("\t",tocka)
+
 for tocka in tocke:
     plt.scatter(tocka.x,tocka.y,color="red")
 
+celije_dijagrama = []
 
-poligoni = []
-
-zz = 0
 tocke_pom = [i for i in tocke]
+
+# print("\n------------------------------------------------------------------------------------------------")
+
 for trenutna_tocka in tocke_pom:
-    print("\n\n\n-------------------------------------------------------------------------------\n\n\nČIKURILA ",trenutna_tocka)
+    # print("\n\tTRENUTNA TOČKA: ",trenutna_tocka)
     tocke.sort(key=lambda tocka: udaljenost_tocke(trenutna_tocka,tocka))
+
     tocke.pop(0)
-    simetrale = []
-    xyz = 1
-    zjec = False
+
+    # print("\tSORTIRANE TOČKE: ",tocke)
+
+    rubovi = []
+
+    pronadeno_bar_jedno_sjeciste = False
+
     for tocka in tocke:
-        print("----------------------------------")
-        print("TOČKA: ",tocka)
-        trenutna_simetrala = simetrala(Duzina(trenutna_tocka,tocka))
-        print("TRENUTNA SIMETRALA ",xyz,": ",trenutna_simetrala)
-        xyz+=1
-        if(len(simetrale)==0):
-            simetrale.append(trenutna_simetrala)
+        # print("\n\t*********************************************************************************")
+
+        # print("\n\t\tTOČKA ZA PROVJERU: ",tocka)
+
+        trenutna_duzina = Duzina(trenutna_tocka,tocka)
+        trenutna_simetrala = simetrala(trenutna_duzina)
+
+        # print("\t\tTRENUTNA SIMETRALA: ",trenutna_simetrala)
+
+        # print("\n\t\tSVI RUBOVI: ", rubovi,"\n")
+
+        if(len(rubovi)==0):
+            rubovi.append(trenutna_simetrala)
+            # print("\t\t\tOvo je prvi rub!")
+            # print("\t\t\t+ Dodan rub: ",trenutna_simetrala)
+
         else:
-
             za_ukloniti =  []
-            simetrale_pom = []
-            bio_sjec = False
-            print("SVE SIMETRALE: ",simetrale)
-            for postojeca_simetrala in simetrale:
-                print("\n\tTrenutna simetrala: ",trenutna_simetrala)
-                print("\tPostojeća simetrala: ",postojeca_simetrala)
-                sjeciste_simetrala = trenutna_simetrala.sjeciste(postojeca_simetrala)
-                print("\tSjecište: ",sjeciste_simetrala)
-                if(not(sjeciste_simetrala.prazna())):
-                    bio_sjec = True
-                    zjec = True
-                    #simetrale.remove(postojeca_simetrala)
 
-                    if(postojeca_simetrala.A == sjeciste_simetrala or postojeca_simetrala.B == sjeciste_simetrala):
-                        tocan_dio_postojece_simetrale = postojeca_simetrala
+            simetrale_pom = []
+
+            postoji_sjeciste = False
+
+            for postojeci_rub in rubovi:
+                # print("\t\t\tPOSTOJEĆI RUB: ",postojeci_rub)
+                sjeciste = trenutna_simetrala.sjeciste(postojeci_rub)
+                # print("\t\t\tSjecište: ",sjeciste)
+
+                if(not(sjeciste.prazna())):
+                    postoji_sjeciste = True
+                    pronadeno_bar_jedno_sjeciste = True
+
+                    if(postojeci_rub.A == sjeciste or postojeci_rub.B == sjeciste):
+                        tocan_dio_postojeceg_ruba = postojeci_rub
 
                     else:
 
-                        za_ukloniti.append(postojeca_simetrala)
-                        lijeva_polovica_postojece_simetrale = Duzina(postojeca_simetrala.A,sjeciste_simetrala)
-                        desna_polovica_postojece_simetrale = Duzina(postojeca_simetrala.B,sjeciste_simetrala)
+                        za_ukloniti.append(postojeci_rub)
+                        # print("\t\t\t - Označavanje postojećeg ruba za uklanjanje: ",postojeci_rub)
+                        lijeva_polovica_postojeceg_ruba = Duzina(postojeci_rub.A,sjeciste)
+                        # print("\n\t\t\tLijeva polovica POSTOJEĆEG RUBA: ",lijeva_polovica_postojeceg_ruba)
+                        desna_polovica_postojeceg_ruba = Duzina(postojeci_rub.B,sjeciste)
+                        # print("\t\t\tDesna polovica POSTOJEĆEG RUBA: ",desna_polovica_postojeceg_ruba,"\n")
 
-                        tocan_dio_postojece_simetrale = lijeva_polovica_postojece_simetrale
+                        tocan_dio_postojeceg_ruba = lijeva_polovica_postojeceg_ruba
 
-                        vektor_do_trenutne_točke = Duzina(sjeciste_simetrala, trenutna_tocka).u_vektor()
+                        vektor_do_trenutne_točke = Duzina(sjeciste, trenutna_tocka).u_vektor()
 
-                        kut_između_lpolpostsim_i_vdtt = lijeva_polovica_postojece_simetrale.u_vektor().kut_izmedu_vektora(vektor_do_trenutne_točke)
-                        kut_između_dpolpostsim_i_vdtt = desna_polovica_postojece_simetrale.u_vektor().kut_izmedu_vektora(vektor_do_trenutne_točke)
+                        kut_između_lpolpostrub_i_vdtt = lijeva_polovica_postojeceg_ruba.u_vektor().kut_izmedu_vektora(vektor_do_trenutne_točke)
+                        kut_između_dpolpostrub_i_vdtt = desna_polovica_postojeceg_ruba.u_vektor().kut_izmedu_vektora(vektor_do_trenutne_točke)
 
-                        if(kut_između_lpolpostsim_i_vdtt<kut_između_dpolpostsim_i_vdtt):
-                            tocan_dio_postojece_simetrale = desna_polovica_postojece_simetrale
 
-                        simetrale_pom.append(tocan_dio_postojece_simetrale)
+                        if(kut_između_lpolpostrub_i_vdtt<kut_između_dpolpostrub_i_vdtt):
+                            tocan_dio_postojeceg_ruba = desna_polovica_postojeceg_ruba
 
-                    if (trenutna_simetrala.A == sjeciste_simetrala or trenutna_simetrala.B == sjeciste_simetrala):
+                        # print("\t\t\t",kut_između_lpolpostrub_i_vdtt," < ",kut_između_dpolpostrub_i_vdtt,"  =>  ",kut_između_lpolpostrub_i_vdtt<kut_između_dpolpostrub_i_vdtt)
+
+                        simetrale_pom.append(tocan_dio_postojeceg_ruba)
+                        # print("\t\t\t+ Dodan rub: ", tocan_dio_postojeceg_ruba)
+
+                    # print("\n\t\t\tTočan dio postojećeg ruba: ",tocan_dio_postojeceg_ruba,"\n")
+
+                    if (trenutna_simetrala.A == sjeciste or trenutna_simetrala.B == sjeciste):
                         tocan_dio_trenutne_simetrale = trenutna_simetrala
                     else:
-                        lijeva_polovica_trenutne_simetrale = Duzina(sjeciste_simetrala, trenutna_simetrala.A)
-                        desna_polovica_trenutna_simetrale = Duzina(sjeciste_simetrala, trenutna_simetrala.B)
+                        lijeva_polovica_trenutne_simetrale = Duzina(sjeciste, trenutna_simetrala.A)
+                        # print("\t\t\tLijeva polovica TRENUTNE simetrale: ", lijeva_polovica_trenutne_simetrale)
+                        desna_polovica_trenutna_simetrale = Duzina(sjeciste, trenutna_simetrala.B)
+                        # print("\t\t\tDesna polovica TRENUTNE simetrale: ", desna_polovica_trenutna_simetrale)
 
-                        trenutna_tocka_je_na_lijevoj_strani = tocan_dio_postojece_simetrale.u_vektor().vektorski_produkt(
+                        trenutna_tocka_je_na_lijevoj_strani = tocan_dio_postojeceg_ruba.u_vektor().vektorski_produkt(
                             vektor_do_trenutne_točke) > 0
 
-                        lpoltrensim_pripada_poligonu = tocan_dio_postojece_simetrale.u_vektor().vektorski_produkt(
+                        # print("\n\t\t\t\tTrenutna točka je na lijevoj strani: ",trenutna_tocka_je_na_lijevoj_strani)
+
+                        lpoltrensim_pripada_poligonu = tocan_dio_postojeceg_ruba.u_vektor().vektorski_produkt(
                             lijeva_polovica_trenutne_simetrale.u_vektor()) > 0
+
+                        # print("\n\t\t\t\tLijeva polovica simetrale pripada poligonu: ",lpoltrensim_pripada_poligonu)
+
                         if (lpoltrensim_pripada_poligonu == trenutna_tocka_je_na_lijevoj_strani):
                             tocan_dio_trenutne_simetrale = lijeva_polovica_trenutne_simetrale
 
                         else:
                             tocan_dio_trenutne_simetrale = desna_polovica_trenutna_simetrale
 
-                    print("\t\tZadržati ću: ")
-                    print("\t\t\t1. ",tocan_dio_postojece_simetrale)
-                    print("\t\t\t2. ",tocan_dio_trenutne_simetrale)
+
+                    # print("\n\t\t\tTočan dio trenutne simetrale: ",tocan_dio_trenutne_simetrale)
                     trenutna_simetrala = tocan_dio_trenutne_simetrale
-
-                elif(not zjec):
+                    # print("\n\t\t\t\tTrenutna simetrala postaje: ",trenutna_simetrala)
+                elif(not pronadeno_bar_jedno_sjeciste):
                     simetrale_pom.append(trenutna_simetrala)
+                    # print("\n\t\t\tOva simetrala je paralelna sa svima postojećima!")
+                    # print("\t\t\t+ Dodan rub: ", trenutna_simetrala)
 
 
+
+            # print("\n\t\tZa ukloniti: ")
+            # for duzina in za_ukloniti:
+            #     print("\t\t\t",duzina,"\n")
 
             for sim in za_ukloniti:
-                for simica in simetrale:
+                for simica in rubovi:
                     if(simica==sim):
-                        simetrale.remove(simica)
-                        print("UKLANJAM: ",simica)
+                        rubovi.remove(simica)
+                        # print("\t\tUKLANJAM: ",simica)
                         break
 
             for sim in simetrale_pom:
-                simetrale.append(sim)
-            if(bio_sjec):
-                simetrale.append(trenutna_simetrala)
+                rubovi.append(sim)
+
+            if(postoji_sjeciste):
+                rubovi.append(trenutna_simetrala)
 
 
+        # print("\n\t*********************************************************************************")
 
-        print("\nPRONAĐENE SIMETRALE: ",simetrale)
-        print("----------------------------------")
+        # print("\nPRONAĐENI RUBOVI: ")
+        # for rub in rubovi:
+        #     print("\t",rub)
+        # print("----------------------------------")
 
-    print("?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????")
-    print("SIMETRALE ZA UKLONITI PRIJE: ",za_ukloniti)
-    print("SIMETRALE : ",simetrale)
-    for s1 in simetrale:
-        print("TRENUTNA SIMETRALA: ",s1)
+
+    # print("\n\t//////////////////////////////////////////////////////////////////////////////////////////////")
+
+    for s1 in rubovi:
+        # print("Rub koji provjeravamo: ",s1)
         tocka_je_lijevo = s1.u_vektor().vektorski_produkt(Duzina(s1.B,trenutna_tocka).u_vektor())>0
-        print("TRENUTNA TOČKA JE NA STRANI: ",tocka_je_lijevo)
-        for s2 in simetrale:
-            print("\tSimetrala za provjeru: ",s2)
-            if (s2.A != s1.A and s2.A != s1.B):
-                tockaA_je_lijevo = s1.u_vektor().vektorski_produkt(Duzina(s1.B, s2.A).u_vektor()) >0
-                print("\tTočka A: ",s2.A)
-                print("\tTočka A je na strani: ",tockaA_je_lijevo)
+
+        # print("Trenutna tokča je na strani: ",tocka_je_lijevo)
+        # print("\t---",s1.u_vektor().vektorski_produkt(Duzina(s1.B,trenutna_tocka).u_vektor()))
+        for s2 in rubovi:
+            # print("\n\tRub za provjeru: ",s2)
+            if (not(s2.A == s1.A or s2.A == s1.B)):
+                tockaA_je_lijevo = s1.u_vektor().vektorski_produkt(Duzina(s1.B, s2.A).u_vektor())>0
+                # print("\n\tTočka A: ",s2.A)
+                # print("\tTočka A je na strani: ",tockaA_je_lijevo)
+                # print("\t\t--",s1.u_vektor().vektorski_produkt(Duzina(s1.B, s2.A).u_vektor()))
                 if(tockaA_je_lijevo!=tocka_je_lijevo):
                     za_ukloniti.append(s2)
-                    print("\t\tUklanjam točku A")
-            if (s2.B != s1.A and s2.B != s1.B):
-                tockaB_je_lijevo = s1.u_vektor().vektorski_produkt(Duzina(s1.B, s2.B).u_vektor()) >0
-                print("\tTočka B: ",s2.B)
-                print("\tTočka B je na strani: ",tockaB_je_lijevo)
+                    # print("\t\tUklanjam točku A")
+            if (not(s2.B == s1.A or s2.B == s1.B)):
+                tockaB_je_lijevo = s1.u_vektor().vektorski_produkt(Duzina(s1.B, s2.B).u_vektor())>0
+                # print("\n\tTočka B: ",s2.B)
+                # print("\tTočka B je na strani: ",tockaB_je_lijevo)
+                # print("\t\t--",s1.u_vektor().vektorski_produkt(Duzina(s1.B, s2.B).u_vektor()))
                 if(tockaB_je_lijevo!=tocka_je_lijevo):
                     za_ukloniti.append(s2)
-                    print("\t\tUklanjam točku B")
-    print("SIMETRALE ZA UKLONITI POSLIJE: ",za_ukloniti)
-    print("?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????")
+    #                 print("\t\tUklanjam točku B")
+    # print("SIMETRALE ZA UKLONITI POSLIJE: ")
+    # for zu in za_ukloniti:
+    #     print("\t",zu)
+
 
     for sim in za_ukloniti:
-        for simica in simetrale:
+        for simica in rubovi:
             if(simica==sim):
-                print("ZADNJE UKLANJAM: ",simica)
-                simetrale.remove(simica)
+                # print("ZADNJE UKLANJAM: ",simica)
+                rubovi.remove(simica)
 
+    # print("\n\t//////////////////////////////////////////////////////////////////////////////////////////////")
 
-
-    print(simetrale)
-    # for simetral in simetrale:
-    #     plt.plot([simetral.A.x, simetral.B.x], [simetral.A.y, simetral.B.y], color="black")
-
-
-    simetralne_tocke = [tockaa.A for tockaa in simetrale]
-    simetralne_tocke += [tockaa.B for tockaa in simetrale if tockaa.B not in simetralne_tocke]
+    simetralne_tocke = [tockaa.A for tockaa in rubovi]
+    simetralne_tocke += [tockaa.B for tockaa in rubovi if tockaa.B not in simetralne_tocke]
 
     simetralne_tocke = list(set(simetralne_tocke))
-    print("\\\\\\",simetralne_tocke)
+
     najmanja = simetralne_tocke[0]
-    for ul in simetralne_tocke:
-        if ul.y < najmanja.y:
-            najmanja = ul
-        elif ul.y == najmanja.y and ul.x < najmanja.x:
-            najmanja = ul
-    P0 = najmanja
 
-    print(P0)
-    simetralne_tocke.remove(P0)
 
-    simetralne_tocke.sort(key=lambda x:(Duzina(P0,P0+Tocka(1,0)).u_vektor().kut_izmedu_vektora(Duzina(P0,Tocka(x.x,x.y)).u_vektor()),Duzina(P0,x).u_vektor().duljina()),reverse=True)
+    # print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
-    simetralne_tocke.append(P0)
 
-    poligoni.append(VoronoiCelija(trenutna_tocka,Poligon(simetralne_tocke)))
+    # for t in simetralne_tocke:
+    #     print(t," - ",kut360(Duzina(trenutna_tocka,trenutna_tocka+Tocka(1,0)).u_vektor(),Duzina(trenutna_tocka,t).u_vektor())*57.296)
+
+    simetralne_tocke.sort(key= lambda t: (kut360(Duzina(trenutna_tocka,trenutna_tocka+Tocka(1,0)).u_vektor(),Duzina(trenutna_tocka,t).u_vektor()),Duzina(trenutna_tocka,t).u_vektor().duljina()))
+
+    # for t in simetralne_tocke:
+    #     print(t, " - ", kut360(Duzina(trenutna_tocka, trenutna_tocka + Tocka(1, 0)).u_vektor(),
+    #                            Duzina(trenutna_tocka, t).u_vektor()) * 57.296)
+
+    # print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+
+    voroni_celija = VoronoiCelija(trenutna_tocka,Poligon(simetralne_tocke))
+
+    # print("\n\n DOBIVENA ĆELIJA: ")
+    # print("\t TOČKA: ",voroni_celija.Tocka)
+    #
+    # print("\t POLIGON: ")
+
+    poly = voroni_celija.Poligon.tocke
+
+    # for tocka in poly:
+    #     print("\t\t",tocka)
+
+    celije_dijagrama.append(voroni_celija)
 
     tocke.insert(0,trenutna_tocka)
+    # print("\n\n\n\n...................................................................................................................")
+
+# print("------------------------------------------------------------------------------------------------")
+
 
 color = (0,0,0)
-for poligon in poligoni:
+for poligon in celije_dijagrama:
 
     y = list(color)
 
@@ -664,18 +740,19 @@ plt.scatter(trenutna_tocka.x,trenutna_tocka.y,color="blue")
 print(" **** T O Č K E : ",tocke," : T O Č K E ****")
 
 
-# poligoni.sort(key = lambda nesta: nesta.Tocka.y)
+# celije_dijagrama.sort(key = lambda nesta: nesta.Tocka.y)
 #
 # djuzine = []
 #
-# for p1 in range(0,len(poligoni)):
-#     for p2 in range(p1+1,len(poligoni)):
-#         if(poligoni[p1].Poligon*poligoni[p2].Poligon!=[]):
-#             djuzine.append(Duzina(poligoni[p1].Tocka,poligoni[p2].Tocka))
-#
+# for i in range(0,len(celije_dijagrama)):
+#     for j in range(i+1,len(celije_dijagrama)):
+#         for z in range(0,len(celije_dijagrama[i].Poligon.u_duzine())):
+#             for k in range(0,len(celije_dijagrama[j].Poligon.u_duzine())):
+#                 if(celije_dijagrama[i].Poligon.u_duzine()[z]==celije_dijagrama[j].Poligon.u_duzine()[k]):
+#                     djuzine.append(Duzina(celije_dijagrama[i].Tocka,celije_dijagrama[j].Tocka))
 #
 # for i in range(0,len(djuzine)):
-#     plt.plot([djuzine[i].A.x, djuzine[i].B.x], [djuzine[i].A.y, djuzine[i].B.y], color="black")
+#     plt.plot([djuzine[i].A.x, djuzine[i].B.x], [djuzine[i].A.y, djuzine[i].B.y], color="purple",linestyle="-")
 
 
 plt.show()

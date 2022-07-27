@@ -4,10 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #koliko "visoko" idu x i y-os
-xmin, xmax, ymin, ymax = -30,30,-30,30
+xmin, xmax, ymin, ymax = -10,10,-10,10
 
 #koliko često se prikazuju brojevi na x i y-osi
-ticks_frequency = 10
+ticks_frequency = 1
 
 #veličina slike koja će se prikazati (u inčima)
 #vraća fig (predstavlja prozor koji prikazuje crtež) i os
