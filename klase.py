@@ -1,5 +1,6 @@
 import math
 from crtanje import *
+import random
 
 class Tocka:
     def __init__(self, x, y):
@@ -9,7 +10,7 @@ class Tocka:
     def __eq__(self, other):
         if(self.x==None or self.y==None or other.x==None or other.y==None):
             return self.x == other.x and self.y == other.y
-        return abs(self.x-other.x)<0.00001 and abs(self.y-other.y)<0.00001
+        return abs(self.x-other.x)<0.000001 and abs(self.y-other.y)<0.00001
 
     def __hash__(self):
         return hash(self.x+self.y)
@@ -86,6 +87,9 @@ class Tocka:
                         sjecista += 1
 
         return 1 + (sjecista % 2 == 0) * -2 #ovo vraća -1 ili 1, ovisi nalazi li se točka u poligonu ili ne
+
+    def udaljenost_od(self, other):
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
 class Duzina:
     def __init__(self, A, B):
@@ -171,6 +175,28 @@ class Duzina:
             pom = self.B.y
         return pom
 
+    def simetrala(self):
+        a = self.A
+        b = self.B
+
+        srediste = Tocka((a.x + b.x) / 2, (a.y + b.y) / 2)
+
+        if (a.y == b.y):
+            tocka_prva = Tocka(srediste.x, 100000000)
+            tocka_druga = Tocka(srediste.x, -100000000)
+
+        elif (a.x == b.x):
+            koeficijent = 0
+            tocka_prva = Tocka(100000000, srediste.y + koeficijent * (100000000 - srediste.x))
+            tocka_druga = Tocka(-100000000, srediste.y + koeficijent * (-100000000 - srediste.x))
+
+        else:
+            koeficijent = -1 / ((b.y - a.y) / (b.x - a.x))
+            tocka_prva = Tocka(100000000, srediste.y + koeficijent * (100000000 - srediste.x))
+            tocka_druga = Tocka(-100000000, srediste.y + koeficijent * (-100000000 - srediste.x))
+
+        return Duzina(tocka_prva, tocka_druga)
+
 class Vektor:
     def __init__(self, i, j):
         self.i = i
@@ -214,6 +240,15 @@ class Vektor:
 
     def kut_izmedu_vektora(self, other):
         return math.acos(self.skalarni_produkt(other) / (self.duljina() * other.duljina()))
+
+    def kut_izmedu_vektora360(self, other):
+        sp = self.skalarni_produkt(other)
+        det = self.i * other.j - self.j * other.i
+        kut = math.atan2(det, sp)
+        if (kut < 0):
+            kut += 2 * math.pi
+
+        return kut
 
 class Poligon:
 
@@ -349,6 +384,11 @@ class Poligon:
             string += "(%s , %s) " % (t.x, t.y)
         return string
 
+class VoronoiCelija:
+    def __init__(self, Tocka,Poligon):
+        self.Tocka = Tocka
+        self.Poligon = Poligon
+
 class PomTocka:
     def __init__(p_1,tocka,polozaj):
         p_1.tocka=tocka
@@ -436,3 +476,7 @@ def povezi_fragmente(razvrstani_fragmenti):
 
         povezani_fragmenti.append(novi_poligon)
     return povezani_fragmenti
+
+def generiraj_broj():
+    max = 10
+    return random.random() * 1000 % 2*max - max
