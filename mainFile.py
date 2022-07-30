@@ -1,5 +1,5 @@
-from voronoi import *
+from triangulacija import *
 
-v_voronoi_test(50)
+v_triangulacija_test(50)
 
 plt.show()
