@@ -46,4 +46,4 @@ ax.set_xticks(np.arange(xmin, xmax+1), minor=True)
 ax.set_yticks(np.arange(ymin, ymax+1), minor=True)
 
 #which - na koje linije se odnosi (na one koje izlaze iz x i y osi)
-ax.grid(which='both', color='grey', linewidth=1, linestyle='--', alpha=0.2)
+#ax.grid(which='both', color='grey', linewidth=1, linestyle='--', alpha=0.2)

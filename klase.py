@@ -1,5 +1,6 @@
 import math
 from crtanje import *
+import random
 
 class Tocka:
     def __init__(self, x, y):
@@ -9,7 +10,7 @@ class Tocka:
     def __eq__(self, other):
         if(self.x==None or self.y==None or other.x==None or other.y==None):
             return self.x == other.x and self.y == other.y
-        return abs(self.x-other.x)<0.0000000001 and abs(self.y-other.y)<0.0000000001
+        return abs(self.x-other.x)<0.000001 and abs(self.y-other.y)<0.00001
 
     def __hash__(self):
         return hash(self.x+self.y)
@@ -41,6 +42,7 @@ class Tocka:
 # ako je kvadratna duljina == skalarni produkt, tada je v1==v2, a ako je kvadratna duljina veća, tada v2 pripada v1, odnosno točka pripada dužini
 # ako je skalarni produkt manji od 0 (negativna je) tada je točka izvan dane dužine (na 'lijevo')
 # ako je skalarni produkt veći od kvadratne duljine, tada je točka izvan dane dužine (na 'desno')
+# https://stackoverflow.com/questions/328107/how-can-you-determine-a-point-is-between-two-other-points-on-a-line-segment
     def pripada_duzini(self, duzina):
 
         if(self==duzina.A or self==duzina.B):
@@ -72,19 +74,22 @@ class Tocka:
 # na kraju se provjerava je li broj sjecišta paran (točka je van poligona) ili neparan (točka je u poligonu)
 #[Computational Geometry: An Introduction, 41. str]
     def pripada_poligonu(self, poligon):
-        duzina_za_presjek = Duzina(self, Tocka(poligon.max_x() + 0.0000001, self.y))
+        duzina_za_presjek = Duzina(self, Tocka(poligon.max_x() + 0.0001, self.y))
         skup_stranica_poligona = poligon.u_duzine()
         sjecista = 0
         for i in skup_stranica_poligona:
             if (self.pripada_duzini(i) or self in poligon.tocke):
-                return 0
+                return 0 #tu vraćamo nulu samo da se vidi da je točka "na rubu" poligona
             elif (not (i.u_vektor() // duzina_za_presjek.u_vektor())):
                 S = duzina_za_presjek.sjeciste(i)
                 if (S != Tocka(None, None)):
                     if ((S in poligon.tocke and S.y == i.manja_oridnata()) or (S not in poligon.tocke)):
                         sjecista += 1
 
-        return 1 + (sjecista % 2 == 0) * -2
+        return 1 + (sjecista % 2 == 0) * -2 #ovo vraća -1 ili 1, ovisi nalazi li se točka u poligonu ili ne
+
+    def udaljenost_od(self, other):
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
 class Duzina:
     def __init__(self, A, B):
@@ -146,6 +151,7 @@ class Duzina:
             else:
                 return Tocka(None,None)
 
+        vv = vektor_other.vektorski_produkt(vektor_self)
         t = (self.A.x * (other.B.y - other.A.y) + other.A.x * (self.A.y - other.B.y) + other.B.x * (other.A.y - self.A.y)) / (
             vektor_other.vektorski_produkt(vektor_self))
 
@@ -168,6 +174,28 @@ class Duzina:
         if (pom < self.B.y):
             pom = self.B.y
         return pom
+
+    def simetrala(self):
+        a = self.A
+        b = self.B
+
+        srediste = Tocka((a.x + b.x) / 2, (a.y + b.y) / 2)
+
+        if (a.y == b.y):
+            tocka_prva = Tocka(srediste.x, 100000000)
+            tocka_druga = Tocka(srediste.x, -100000000)
+
+        elif (a.x == b.x):
+            koeficijent = 0
+            tocka_prva = Tocka(100000000, srediste.y + koeficijent * (100000000 - srediste.x))
+            tocka_druga = Tocka(-100000000, srediste.y + koeficijent * (-100000000 - srediste.x))
+
+        else:
+            koeficijent = -1 / ((b.y - a.y) / (b.x - a.x))
+            tocka_prva = Tocka(100000000, srediste.y + koeficijent * (100000000 - srediste.x))
+            tocka_druga = Tocka(-100000000, srediste.y + koeficijent * (-100000000 - srediste.x))
+
+        return Duzina(tocka_prva, tocka_druga)
 
 class Vektor:
     def __init__(self, i, j):
@@ -192,8 +220,8 @@ class Vektor:
                 return True
             else:
                 return False
-
-        return (self.i/other.i)*other.j==self.j
+        g = (self.i/other.i)*other.j
+        return abs((self.i/other.i)*other.j - self.j)<0.000001
 
     def __repr__(self):
         return "(%s , %s)" % (self.i, self.j)
@@ -213,6 +241,15 @@ class Vektor:
     def kut_izmedu_vektora(self, other):
         return math.acos(self.skalarni_produkt(other) / (self.duljina() * other.duljina()))
 
+    def kut_izmedu_vektora360(self, other):
+        sp = self.skalarni_produkt(other)
+        det = self.i * other.j - self.j * other.i
+        kut = math.atan2(det, sp)
+        if (kut < 0):
+            kut += 2 * math.pi
+
+        return kut
+
 class Poligon:
 
     def __init__(self,tocke):
@@ -225,6 +262,7 @@ class Poligon:
     def broj_tocaka(self):
         return len(self.tocke)
 
+    # [An algorithm for computing the union, intersection or difference of two polygons]
     def bool_operacije(self, other, operacija):
         # 1|. Promijena orijentacije po potrebi
         if (operacija == -1):
@@ -280,6 +318,7 @@ class Poligon:
 
         return rjesenje
 
+    # zašto ovo radi - [https://www.baeldung.com/cs/2d-polygon-area]
     def orijentacija(self):
         zbroj = 0
         br_tocaka = self.broj_tocaka()
@@ -333,6 +372,22 @@ class Poligon:
                 pom=i.y
         return pom
 
+    def __repr__(self):
+        string = ""
+        for t in self.tocke:
+            string+="(%s , %s) " % (t.x, t.y)
+        return string
+
+    def __str__(self):
+        string = ""
+        for t in self.tocke:
+            string += "(%s , %s) " % (t.x, t.y)
+        return string
+
+class VoronoiCelija:
+    def __init__(self, Tocka,Poligon):
+        self.Tocka = Tocka
+        self.Poligon = Poligon
 
 class PomTocka:
     def __init__(p_1,tocka,polozaj):
@@ -421,3 +476,7 @@ def povezi_fragmente(razvrstani_fragmenti):
 
         povezani_fragmenti.append(novi_poligon)
     return povezani_fragmenti
+
+def generiraj_broj():
+    max = 10
+    return random.random() * 1000 % 2*max - max
