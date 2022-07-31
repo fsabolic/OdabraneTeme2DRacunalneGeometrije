@@ -1,5 +1,11 @@
 from klase import *
 
+#Ovo je "pohlepna" implementacija triangulacije
+#Prvo nađemo sve dužine koje mogu postojati između točaka u danom skupu točaka
+# Nakon toga, sortiramo ih po duljini
+# Na kraju, po redu uzimamo dužine i pohranjujemo ih kao dijelove triangulacije, osim ako postoji sjecište između odabrane dužine i neke dužine koja se nalazi u skupu već odabranih dužina
+# [Computational Geometry - An Introduction, 235. str]
+
 def triangulacija(tocke):
     tocke = list(set(tocke))
 
@@ -25,10 +31,7 @@ def triangulacija(tocke):
 
     return triang_duzine
 
-def v_triangulacija_test(br_tocaka):
-
-    tocke = [Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,br_tocaka)]
-
+def v_triangulacija(tocke):
     triang_duzine = triangulacija(tocke)
 
     for duzina in triang_duzine:
@@ -36,3 +39,13 @@ def v_triangulacija_test(br_tocaka):
 
     for tocka in tocke:
         plt.scatter(tocka.x, tocka.y, color="red",marker="x")
+
+    return triang_duzine
+
+def v_triangulacija_test(br_tocaka):
+
+    tocke = [Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,br_tocaka)]
+
+    triang_duzine = v_triangulacija(tocke)
+
+

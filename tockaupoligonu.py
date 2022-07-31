@@ -39,7 +39,7 @@ def v_tocka_u_poligonu_test(br_tocaka):
         ax.annotate(imena_tocaka[i % len(imena_tocaka)], (poligon.tocke[i].x, poligon.tocke[i].y))
 
     for i in range(0, br_tocaka):
-        tocka = Tocka(random() * 100 % 20 - 10, random() * 100 % 20 - 10)
+        tocka = Tocka(random.random() * 100 % 20 - 10, random.random() * 100 % 20 - 10)
         if (tocka.pripada_poligonu(poligon)>-1):
             ax.scatter(tocka.x, tocka.y, marker="o", color="red")
         else:
@@ -51,9 +51,9 @@ def v_tocka_u_poligonu_test(br_tocaka):
 
 
 def napravi_razlicitu_tocku(lista):
-    tocka = Tocka(random() * 100 % 20 - 10, random() * 100 % 20 - 10)
+    tocka = Tocka(random.random() * 100 % 20 - 10, random.random() * 100 % 20 - 10)
     while (tocka in lista):
-        tocka = Tocka(int(random() * 100 % 20 - 10), int(random() * 100 % 20 - 10))
+        tocka = Tocka(int(random.random() * 100 % 20 - 10), int(random.random() * 100 % 20 - 10))
 
     return tocka
 

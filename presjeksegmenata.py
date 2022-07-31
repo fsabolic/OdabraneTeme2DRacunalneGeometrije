@@ -2,7 +2,7 @@
 #edgecase: presjek dviju paralelnih dužina (koliko vrijednosti da vraća)
 #! ! ! float vrijednosti
 
-from random import *
+import random
 from klase import *
 from string import ascii_uppercase
 from crtanje import *
@@ -113,10 +113,10 @@ def v_presjek_segmenata_test(br_duzina):
     #generiranje nasumičnih točaka i dužina
     tocke = []
     for i in range(br_duzina):
-        A,B=Tocka(int((random() * 100) % 20-10), (int(random() * 100)%20-10)),Tocka(int((random() * 100) % 20-10),(int(random() * 100)%20-10))
+        A,B=Tocka(int((random.random() * 100) % 20-10), (int(random.random() * 100)%20-10)),Tocka(int((random.random() * 100) % 20-10),(int(random.random() * 100)%20-10))
         while(A==B):
-            A, B = Tocka(int((random() * 100) % 20 - 10), (int(random() * 100) % 20 - 10)), Tocka(
-                int((random() * 100) % 20 - 10), (int(random() * 100) % 20 - 10))
+            A, B = Tocka(int((random.random() * 100) % 20 - 10), (int(random.random() * 100) % 20 - 10)), Tocka(
+                int((random.random() * 100) % 20 - 10), (int(random.random() * 100) % 20 - 10))
         tocke.append(A)
         tocke.append(B)
     duzine = [Duzina(tocke[i*2],tocke[i*2+1]) for i in range(br_duzina)]
