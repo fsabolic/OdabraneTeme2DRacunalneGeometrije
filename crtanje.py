@@ -11,7 +11,7 @@ ticks_frequency = 1
 
 #veličina slike koja će se prikazati (u inčima)
 #vraća fig (predstavlja prozor koji prikazuje crtež) i os
-fig, ax = plt.subplots(figsize=(8, 8))
+fig, ax = plt.subplots(figsize=(12,8))
 
 #postavlja neku boju pozadine
 fig.patch.set_facecolor('#ffffff')
@@ -46,4 +46,4 @@ ax.set_xticks(np.arange(xmin, xmax+1), minor=True)
 ax.set_yticks(np.arange(ymin, ymax+1), minor=True)
 
 #which - na koje linije se odnosi (na one koje izlaze iz x i y osi)
-#ax.grid(which='both', color='grey', linewidth=1, linestyle='--', alpha=0.2)
+ax.grid(which='both', color='grey', linewidth=1, linestyle='--', alpha=0.2)

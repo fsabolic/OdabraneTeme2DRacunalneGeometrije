@@ -1,7 +1,7 @@
 #ne radi ako se radi SAMO o skupu točaka koje se sve nalaze na 1 liniji
 #ŠTO SA TOČKAMA KOJE SE NALAZE NA DUŽINI IZMEĐU 2 TOČKE KONVEKSNE LJUSKE
 from klase import *
-from random import *
+import random
 from crtanje import *
 
 # Grahamov scan!
@@ -56,7 +56,7 @@ def v_konveksna_ljuska(tocke):
     ax.scatter([i.x for i in k_l], [i.y for i in k_l], color="red")
 
 def v_konveksna_ljuska_test(br_tocaka):
-    tocke=[Tocka(random()*1000%20-10,random()*1000%20-10) for i in range(br_tocaka)]
+    tocke=[Tocka(random.random()*1000%20-10,random.random()*1000%20-10) for i in range(br_tocaka)]
     k_l=konveksna_ljuska(tocke)
     ax.fill([i.x for i in k_l], [i.y for i in k_l], facecolor="lightblue", edgecolor="blue")
     ax.scatter([i.x for i in tocke], [i.y for i in tocke], color="black")

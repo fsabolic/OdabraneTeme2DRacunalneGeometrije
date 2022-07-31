@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from presjeksegmenata import *
 from booloperacije import *
 from konveksnaljuska import *
-from math import *
+import math
 
 #Prvo uklanjamo duplikatne točke u danom skupu
 #Ako su zadane samo dvije točke, koristimo poseban algoritam koji stvara samo jednu simetralu i dijeli prostor na dva četverokuta:
