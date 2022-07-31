@@ -90,7 +90,15 @@ def napravi_poligon():
         duzina = duzine[-1]
         duzine.pop()
 
-    return Poligon(tocke)
+    zbroj_tocka = Tocka(0,0)
+    for tocka in tocke:
+        zbroj_tocka +=tocka
+
+    zbroj_tocka = Tocka(zbroj_tocka.x/len(tocke),zbroj_tocka.y/len(tocke))
+
+
+
+    return Poligon(sorted(tocke,key = lambda tocka: Duzina(zbroj_tocka,zbroj_tocka+Tocka(1,0)).u_vektor().kut_izmedu_vektora360(Duzina(zbroj_tocka,tocka).u_vektor())))
 
 
 
