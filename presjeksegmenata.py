@@ -5,8 +5,7 @@
 import random
 from klase import *
 from string import ascii_uppercase
-from crtanje import *
-
+import matplotlib.pyplot as plt
 #funkcija koja vraća sjecišta zadanih dužina
 def presjek_segmenata(duzine):
     sjecista=[]

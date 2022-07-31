@@ -2,7 +2,7 @@
 #napravi_poligon() ne radi kako treba jer ga zezaju float vrijednosti
 
 from presjeksegmenata import *
-
+import matplotlib.pyplot as plt
 #funkcija koja vraća True/False ovisno pripada li dana točka danom poligonu
 def tocka_u_poligonu(tocka,poligon):
     return tocka.pripada_poligonu(poligon)

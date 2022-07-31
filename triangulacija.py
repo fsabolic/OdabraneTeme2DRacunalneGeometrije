@@ -1,5 +1,6 @@
 from klase import *
 from voronoi import v_voronoi
+import matplotlib.pyplot as plt
 #Ovo je "pohlepna" implementacija triangulacije
 #Prvo nađemo sve dužine koje mogu postojati između točaka u danom skupu točaka
 # Nakon toga, sortiramo ih po duljini

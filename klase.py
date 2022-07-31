@@ -1,6 +1,6 @@
 import math
-from crtanje import *
 import random
+import matplotlib.pyplot as plt
 
 class Tocka:
     def __init__(self, x, y):

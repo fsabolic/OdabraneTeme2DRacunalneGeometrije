@@ -2,7 +2,7 @@
 #ŠTO SA TOČKAMA KOJE SE NALAZE NA DUŽINI IZMEĐU 2 TOČKE KONVEKSNE LJUSKE
 from klase import *
 import random
-from crtanje import *
+import matplotlib.pyplot as plt
 
 # Grahamov scan!
 #prvo izbacujemo sve iste točke (mogu nastati problemi zbog zadavanja dužina s istim točkama i sl.)

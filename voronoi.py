@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from presjeksegmenata import *
 from booloperacije import *
 from konveksnaljuska import *
-from crtanje import *
 import math
 
 #Prvo uklanjamo duplikatne točke u danom skupu

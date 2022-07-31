@@ -1,5 +1,6 @@
 from klase import *
 from konveksnaljuska import *
+import matplotlib.pyplot as plt
 # p_1=Poligon(konveksna_ljuska([Tocka(int(random()*100%20-10),int(random()*100%20-10)) for i in range(0,int(random()*100%7+3))]))
 # p_2=Poligon(konveksna_ljuska([Tocka(int(random()*100%20-10),int(random()*100%20-10)) for i in range(0,int(random()*100%7+3))]))
 
