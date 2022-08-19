@@ -2,7 +2,7 @@
 #napravi_poligon() ne radi kako treba jer ga zezaju float vrijednosti
 
 from presjeksegmenata import *
-
+import matplotlib.pyplot as plt
 #funkcija koja vraća True/False ovisno pripada li dana točka danom poligonu
 def tocka_u_poligonu(tocka,poligon):
     return tocka.pripada_poligonu(poligon)
@@ -15,13 +15,13 @@ def v_tocka_u_poligonu(tocka,poligon):
     pripada=tocka.pripada_poligonu(poligon)
 
     #prikazuju se poligon, njegove točke i dana točka
-    ax.fill([i.x for i in poligon.tocke], [i.y for i in poligon.tocke], facecolor="lightblue", edgecolor="blue")
-    ax.scatter([i.x for i in poligon.tocke], [i.y for i in poligon.tocke],marker='.',color="blue")
+    plt.fill([i.x for i in poligon.tocke], [i.y for i in poligon.tocke], facecolor="lightblue", edgecolor="blue")
+    plt.scatter([i.x for i in poligon.tocke], [i.y for i in poligon.tocke],marker='.',color="blue")
     boja="black"
     if(pripada>-1):
         boja="red"
-    ax.scatter(tocka.x, tocka.y, marker="o", color=boja)
-
+    plt.scatter(tocka.x, tocka.y, marker="o", color=boja)
+    plt.show()
     return pripada
 
 #TESTNI PRIMJER :
@@ -33,18 +33,19 @@ def v_tocka_u_poligonu_test(br_tocaka):
     imena_tocaka = ascii_uppercase
     poligon=napravi_poligon()
 
-    ax.fill([i.x for i in poligon.tocke], [i.y for i in poligon.tocke], facecolor="lightblue", edgecolor="blue")
-    ax.scatter([i.x for i in poligon.tocke], [i.y for i in poligon.tocke],color="blue",marker=".")
+    plt.fill([i.x for i in poligon.tocke], [i.y for i in poligon.tocke], facecolor="lightblue", edgecolor="blue")
+    plt.scatter([i.x for i in poligon.tocke], [i.y for i in poligon.tocke],color="blue",marker=".")
     for i in range(0, len(poligon.tocke)):
-        ax.annotate(imena_tocaka[i % len(imena_tocaka)], (poligon.tocke[i].x, poligon.tocke[i].y))
+        plt.annotate(imena_tocaka[i % len(imena_tocaka)], (poligon.tocke[i].x, poligon.tocke[i].y))
 
     for i in range(0, br_tocaka):
         tocka = Tocka(random.random() * 100 % 20 - 10, random.random() * 100 % 20 - 10)
         if (tocka.pripada_poligonu(poligon)>-1):
-            ax.scatter(tocka.x, tocka.y, marker="o", color="red")
+            plt.scatter(tocka.x, tocka.y, marker="o", color="red")
         else:
-            ax.scatter(tocka.x, tocka.y, marker="o", color="black")
+            plt.scatter(tocka.x, tocka.y, marker="o", color="black")
 
+    plt.show()
 #TESTNI PRIMJER :
 # v_tocka_u_poligonu_test(100)
 
@@ -89,7 +90,15 @@ def napravi_poligon():
         duzina = duzine[-1]
         duzine.pop()
 
-    return Poligon(tocke)
+    zbroj_tocka = Tocka(0,0)
+    for tocka in tocke:
+        zbroj_tocka +=tocka
+
+    zbroj_tocka = Tocka(zbroj_tocka.x/len(tocke),zbroj_tocka.y/len(tocke))
+
+
+
+    return Poligon(sorted(tocke,key = lambda tocka: Duzina(zbroj_tocka,zbroj_tocka+Tocka(1,0)).u_vektor().kut_izmedu_vektora360(Duzina(zbroj_tocka,tocka).u_vektor())))
 
 
 

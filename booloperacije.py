@@ -1,6 +1,6 @@
 from klase import *
-# from random import *
-# from konveksnaljuska import *
+from konveksnaljuska import *
+import matplotlib.pyplot as plt
 # p_1=Poligon(konveksna_ljuska([Tocka(int(random()*100%20-10),int(random()*100%20-10)) for i in range(0,int(random()*100%7+3))]))
 # p_2=Poligon(konveksna_ljuska([Tocka(int(random()*100%20-10),int(random()*100%20-10)) for i in range(0,int(random()*100%7+3))]))
 
@@ -16,11 +16,11 @@ from klase import *
 def v_razlika(p_1,p_2):
     razlika = p_1-p_2
 
-    ax.fill([i.x for i in p_2.tocke], [i.y for i in p_2.tocke], facecolor="red", edgecolor="red", alpha=0.3)
-    ax.fill([i.x for i in p_1.tocke], [i.y for i in p_1.tocke], facecolor="lightblue", edgecolor="blue", alpha=0.3)
+    plt.fill([i.x for i in p_2.tocke], [i.y for i in p_2.tocke], facecolor="red", edgecolor="red", alpha=0.3)
+    plt.fill([i.x for i in p_1.tocke], [i.y for i in p_1.tocke], facecolor="lightblue", edgecolor="blue", alpha=0.3)
     for u in razlika:
-        ax.fill([i.x for i in u], [i.y for i in u], facecolor="none", edgecolor="black")
-        ax.scatter([i.x for i in u], [i.y for i in u], color="black")
+        plt.fill([i.x for i in u], [i.y for i in u], facecolor="none", edgecolor="black")
+        plt.scatter([i.x for i in u], [i.y for i in u], color="black")
     plt.show()
 
     return razlika
@@ -28,11 +28,11 @@ def v_razlika(p_1,p_2):
 def v_presjek(p_1,p_2):
     presjek = p_1*p_2
 
-    ax.fill([i.x for i in p_2.tocke], [i.y for i in p_2.tocke], facecolor="blue", edgecolor="none", alpha=0.4)
-    ax.fill([i.x for i in p_1.tocke], [i.y for i in p_1.tocke], facecolor="red", edgecolor="none", alpha=0.4)
+    plt.fill([i.x for i in p_2.tocke], [i.y for i in p_2.tocke], facecolor="blue", edgecolor="none", alpha=0.4)
+    plt.fill([i.x for i in p_1.tocke], [i.y for i in p_1.tocke], facecolor="red", edgecolor="none", alpha=0.4)
     for u in presjek:
-        ax.fill([i.x for i in u], [i.y for i in u], facecolor="violet", edgecolor="black")
-        ax.scatter([i.x for i in u], [i.y for i in u], color="black")
+        plt.fill([i.x for i in u], [i.y for i in u], facecolor="violet", edgecolor="black")
+        plt.scatter([i.x for i in u], [i.y for i in u], color="black")
     plt.show()
 
     return presjek
@@ -40,14 +40,29 @@ def v_presjek(p_1,p_2):
 def v_unija(p_1,p_2):
     unija  = p_1+p_2
 
-    ax.fill([i.x for i in p_1.tocke], [i.y for i in p_1.tocke], facecolor="red", edgecolor="none", alpha=0.3)
-    ax.fill([i.x for i in p_2.tocke], [i.y for i in p_2.tocke], facecolor="blue", edgecolor="none", alpha=0.3)
+    plt.fill([i.x for i in p_1.tocke], [i.y for i in p_1.tocke], facecolor="red", edgecolor="none", alpha=0.3)
+    plt.fill([i.x for i in p_2.tocke], [i.y for i in p_2.tocke], facecolor="blue", edgecolor="none", alpha=0.3)
 
     for u in unija:
-        ax.fill([i.x for i in u], [i.y for i in u], facecolor="none", edgecolor="black")
+        plt.fill([i.x for i in u], [i.y for i in u], facecolor="none", edgecolor="black")
 
     for u in unija:
-        ax.scatter([i.x for i in u], [i.y for i in u], color="black")
+        plt.scatter([i.x for i in u], [i.y for i in u], color="black")
     plt.show()
 
     return unija
+
+def v_razlika_test():
+   p1 = Poligon(konveksna_ljuska([Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,int(random.random()*1000%10+3))]))
+   p2 = Poligon(konveksna_ljuska([Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,int(random.random()*1000%10+3))]))
+   v_razlika(p1,p2)
+
+def v_unija_test():
+   p1 = Poligon(konveksna_ljuska([Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,int(random.random()*1000%10+3))]))
+   p2 = Poligon(konveksna_ljuska([Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,int(random.random()*1000%10+3))]))
+   v_unija(p1,p2)
+
+def v_presjek_test():
+   p1 = Poligon(konveksna_ljuska([Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,int(random.random()*1000%10+3))]))
+   p2 = Poligon(konveksna_ljuska([Tocka(generiraj_broj(),generiraj_broj()) for i in range(0,int(random.random()*1000%10+3))]))
+   v_presjek(p1,p2)

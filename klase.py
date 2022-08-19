@@ -1,6 +1,6 @@
 import math
-from crtanje import *
 import random
+import matplotlib.pyplot as plt
 
 class Tocka:
     def __init__(self, x, y):
@@ -477,6 +477,5 @@ def povezi_fragmente(razvrstani_fragmenti):
         povezani_fragmenti.append(novi_poligon)
     return povezani_fragmenti
 
-def generiraj_broj():
-    max = 10
+def generiraj_broj(max=10):
     return random.random() * 1000 % 2*max - max

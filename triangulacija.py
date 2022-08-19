@@ -1,5 +1,6 @@
 from klase import *
-
+from voronoi import v_voronoi
+import matplotlib.pyplot as plt
 #Ovo je "pohlepna" implementacija triangulacije
 #Prvo nađemo sve dužine koje mogu postojati između točaka u danom skupu točaka
 # Nakon toga, sortiramo ih po duljini
@@ -39,7 +40,7 @@ def v_triangulacija(tocke):
 
     for tocka in tocke:
         plt.scatter(tocka.x, tocka.y, color="red",marker="x")
-
+    plt.show()
     return triang_duzine
 
 def v_triangulacija_test(br_tocaka):
@@ -49,3 +50,14 @@ def v_triangulacija_test(br_tocaka):
     triang_duzine = v_triangulacija(tocke)
 
 
+def v_triangulacija_voronoi_test(br_tocaka):
+    tocke = [Tocka(generiraj_broj(), generiraj_broj()) for i in range(0, br_tocaka)]
+
+    triang_duzine = triangulacija(tocke)
+
+    for duzina in triang_duzine:
+        plt.plot([duzina.A.x,duzina.B.x],[duzina.A.y,duzina.B.y],color="black",linestyle="dotted")
+
+    for tocka in tocke:
+        plt.scatter(tocka.x, tocka.y, color="red",marker="x")
+    v_voronoi(tocke)

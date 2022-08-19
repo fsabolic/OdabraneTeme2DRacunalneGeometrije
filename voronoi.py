@@ -225,15 +225,7 @@ def voronoi(tocke):
 
     return celije_dijagrama
 
-def v_voronoi_test(broj_tocaka):
-
-    tocke=[]
-
-
-    while(len(tocke)<broj_tocaka):
-        tocke = [Tocka(generiraj_broj(),generiraj_broj()) for i in range(broj_tocaka)]
-        tocke = list(set(tocke))
-
+def v_voronoi(tocke):
     celije_dijagrama = voronoi(tocke)
 
     for poligon in celije_dijagrama:
@@ -245,8 +237,39 @@ def v_voronoi_test(broj_tocaka):
         for simetrala in poligon:
             plt.plot([simetrala.A.x,simetrala.B.x],[simetrala.A.y,simetrala.B.y],color="black")
 
+
     for tocka in tocke:
         plt.scatter(tocka.x,tocka.y,color="red",marker=".")
+
+    xmin = abs(Poligon(tocke).min_x())
+    xmax = abs(Poligon(tocke).max_x())
+    ymin = abs(Poligon(tocke).min_y())
+    ymax = abs(Poligon(tocke).max_y())
+
+    x = xmin
+    y = ymin
+
+    if(x<xmax):
+        x = xmax
+    if(y<ymax):
+        y = ymax
+
+    x+=x*0.1
+    y+=y*0.1
+    plt.axis([-x,x,-y,y])
+    plt.show()
+
+def v_voronoi_test(broj_tocaka):
+
+    tocke=[]
+
+    while(len(tocke)<broj_tocaka):
+        tocke = [Tocka(generiraj_broj(),generiraj_broj()) for i in range(broj_tocaka)]
+        tocke = list(set(tocke))
+
+    v_voronoi(tocke)
+
+
 
     # tocke = [Tocka(9,3),Tocka(-5,-5),Tocka(4, -3),Tocka(-6, 4),Tocka(1, 3),Tocka(1, 0),Tocka(-3, 9),Tocka(2, 6),Tocka(-4, 6),Tocka(2,-2),Tocka(7,0),]
     # #
