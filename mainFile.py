@@ -12,4 +12,4 @@ def sve(br):
     v_voronoi_test(br)
     v_triangulacija_voronoi_test(br)
 
-v_razlika_test()
+sve(50)

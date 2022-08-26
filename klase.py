@@ -620,7 +620,7 @@ def povezi_fragmente(razvrstani_fragmenti):
 
 
 def generiraj_broj(max=10):
-    return int(random.random() * 1000 % 2*max - max)
+    return (random.random() * 1000 % 2*max - max)
 
 
 def nasumicna_tocka(max=10):
