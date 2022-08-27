@@ -1,13 +1,7 @@
-"""
-xcvyxcvyxcvyxcvyx
-"""
 from vizualizacije import *
 
 
 def sve(broj):
-    """
-yxcvyxcvyxcvyxcvyxcvy
-    """
     v_presjek_segmenata_test(broj)
     v_tocka_u_poligonu_test(broj)
     v_tocka_u_poligonu_wn_test(broj)
