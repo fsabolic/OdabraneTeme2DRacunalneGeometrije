@@ -1,16 +1,50 @@
+"""Sadrži klase i funkcije za rad sa osnovnim 2D geometrijskim objektima.
+
+Modul sadrži klase za rad s točkama, dužinama, poligonima i vektorima. Osim
+toga, sadrži klasu za pohranjihvanje podataka iz Voronojeveg dijagrama i
+nekoliko pomoćnih klasa koje nemaju nisu namijenjene za korištenje izvan
+modula.
+
+Atributi
+--------
+epsilon: float
+    Koristi se za preciznost pri uspordbama
+
+"""
 import math
-import random
-from greske import *
+from iznimke import *
 
 epsilon = 0.000001
 
 
 class Tocka:
+    """Prikaz 2D točke u koordinatnom sustavu.
+
+    Parametri
+    ---------
+    x: float
+        Apscisa točke.
+    y: float
+        Ordinata točke.
+    """
+
     def __init__(self, x,y):
         self.x = x
         self.y = y
 
     def __eq__(self, tocka):
+        """Provjerava jesu li dvije točke jednake.
+
+        Provjerava jesu li dvije točke jednake s dozvoljenom preciznošću od epsilon.
+
+        Parametri
+        ---------
+        tocka: Tocka
+
+        Vraća
+        -----
+            :bool
+        """
         if(self.x is None or self.y is None
                 or tocka.x is None or tocka.y is None):
             return self.x == tocka.x and self.y == tocka.y
@@ -20,25 +54,67 @@ class Tocka:
     def __hash__(self):
         return hash(self.x+self.y)
 
-    def __add__(self, other):
-        return Tocka(self.x + other.x, self.y + other.y)
+    def __add__(self, tocka):
+        """Zbraja dva objekta klase Tocka.
 
-    def __sub__(self, other):
-        return Tocka(self.x - other.x, self.y - other.y)
+        Parametri
+        ---------
+        tocka: Tocka
+
+        Vraća
+        -----
+            :Tocka
+            Točka čije koordinate su zbroj apscisa i ordinata danih točaka.
+        """
+        return Tocka(self.x + tocka.x, self.y + tocka.y)
+
+    def __sub__(self, tocka):
+        """Oduzima dva objekta klase Tocka
+
+        """
+        return Tocka(self.x - tocka.x, self.y - tocka.y)
 
     def __repr__(self):
+        """Prikaz objekta klase Tocka"""
         return "(%s , %s)" % (self.x, self.y)
 
     def __str__(self):
+        """Prikaz objekta klase Tocka"""
         return "(%s , %s)" % (self.x, self.y)
 
     def prazna(self):
+        """Provjerava jesu li atributi dane točke oba None."""
         return self==Tocka(None,None)
 
     def mnozenje_skalarom(self,skalar):
+        """Vraća danu točku čije koordinate su pomnožene sklarom.
+
+        Parametri:
+            skalar: float
+                Realni broj s kojim će se množiti koordinate točke.
+
+        Vraća
+        -----
+            :Tocka
+
+        """
         return Tocka(self.x * skalar, self.y * skalar)
 
     def lijevo_od(self,duzina):
+        """Provjerava je li dana točka s lijeve strane vektora predstavljenog dužinom.
+
+        Parametri
+        ---------
+        duzina: Duzina
+
+        Vraća
+        -----
+            :bool
+
+        Napomena
+        --------
+        Kako dužina nema smjer, dužina se prvo pretvara u vektor
+        """
         vektor = duzina.u_vektor()
         tocka = Duzina(duzina.B,self).u_vektor()
         return vektor.vektorski_produkt(tocka)>0
@@ -63,6 +139,7 @@ class Tocka:
     #
     # IZVOR: [https://bit.ly/3R0hIBk]
     def pripada_duzini(self, duzina):
+        """Provjerava nalazi li se točka na danoj dužini."""
         if(self==duzina.A or self==duzina.B):
             return True
 
@@ -111,6 +188,21 @@ class Tocka:
     #
     # IZVOR: [Computational Geometry: An Introduction, 41. str]
     def pripada_poligonu(self, poligon):
+        """Provjerava nalazi li se točka unutar nekog poligona.
+
+        Algoritam se izvrašva pomoću Ray Casting algoritma.
+
+        Parametri
+        ---------
+        poligon:Poligon
+
+        Vraća
+        -----
+            :int
+            Vraća 0 (točka je na rubu poligona), -1 (točka je izvan poligona) ili
+            1 (točka je unutar poligona).
+
+        """
         najdesnija_tocka_plus = Tocka(poligon.max_x() + 1,self.y)
         if(najdesnija_tocka_plus==self):
             return -1
@@ -132,6 +224,21 @@ class Tocka:
         return 1 + (sjecista % 2 == 0) * -2
 
     def pripada_poligonu_wn(self, poligon):
+        """Provjerava nalazi li se točka unutar nekog poligona.
+
+        Algoritam se izvrašva pomoću Winding Number algoritma.
+
+        Parametri
+        ---------
+        poligon:Poligon
+
+        Vraća
+        -----
+            :int
+            Vraća 0 (točka je na rubu poligona), -1 (točka je izvan poligona) ili
+            1 (točka je unutar poligona).
+
+        """
         vrhovi_poligona = poligon.vrhovi
         br_tocaka = poligon.broj_vrhova()
 
@@ -167,10 +274,26 @@ class Tocka:
 
         return unutra
 
-    def udaljenost_od(self, other):
-        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
+    def udaljenost_od(self, tocka):
+        """Vraća udaljenost između dviju točaka."""
+        return math.sqrt((self.x - tocka.x) ** 2 + (self.y - tocka.y) ** 2)
 
     def polarni_kut(self, tocka):
+        """Vraća "polarni kut" pomoću dvije točke.
+
+        Vraća polarni kut između vektora koji počinje od dane točke i
+        paralelan je s x-osi i translatiranog pozicijskog vektora druge
+        dane točke.
+
+        Parametri
+        ---------
+        tocka: Tocka
+
+        Vraća
+        -----
+            :float
+
+        """
         y_os_vektor = Duzina(self,
                              self + Tocka(1, 0)).u_vektor()
         pozicijski_vektor = Duzina(self,
@@ -179,6 +302,20 @@ class Tocka:
         return y_os_vektor.kut_izmedu_vektora360(pozicijski_vektor)
 
 class Duzina:
+    """Prikaz 2D dužine u koordinatnom sustavu.
+
+    Parametri
+    ---------
+    A,B: Tocka
+        Krajnje točke dužine.
+
+    Iznimke
+    -------
+    IstekKrajnjeTockeError
+        Javlja se kada je dužina inicijalizirana s dvije kranje točke koje
+        imaju jednake vrijednosti x i y koordinata.
+    """
+
     def __init__(self, A, B):
         if(A!=B):
             self.A = A
@@ -190,16 +327,20 @@ class Duzina:
         return hash(self.A+self.B)
 
     def __eq__(self, other):
+        """Provjerava jesu li krajnje točke dviju dužina jednake."""
         return ((self.A==other.A and self.B==other.B)
                 or (self.B == other.A and self.A == other.B))
 
     def __repr__(self):
+        """Prikaz objekta klase Duzina"""
         return "(%s , %s)" % (self.A, self.B)
 
     def __str__(self):
+        """Prikaz objekta klase Duzina"""
         return "(%s , %s)" % (self.A, self.B)
 
     def u_vektor(self):
+        """Pretvara objekt klase Duzina u objekt klase Vektor"""
         return Vektor((self.B-self.A).x,(self.B-self.A).y)
 
 
@@ -214,23 +355,33 @@ class Duzina:
     #
     # Ako je 0<t,s<1 tada se dvije dužine sjeku.
     # IZVOR: [Mathematics for Computer Graphics, 274. str]
-    def presjek(self, other):
-        vektor_self = self.u_vektor()
-        vektor_other = other.u_vektor()
-        if (vektor_self // vektor_other):
-            return (other.A.pripada_duzini(self)
-                    or other.B.pripada_duzini(self)
-                    or self.A.pripada_duzini(other)
-                    or self.B.pripada_duzini(other))
+    def presjek(self, duzina):
+        """Provjerava sijeku li se dvije dužine.
 
-        t = ((self.A.x * (other.B.y - other.A.y)
-             + other.A.x * (self.A.y - other.B.y)
-             + other.B.x * (other.A.y - self.A.y))
+        Parametri
+        ---------
+        duzina: Duzina
+
+        Vraća
+        -----
+            :bool
+        """
+        vektor_self = self.u_vektor()
+        vektor_other = duzina.u_vektor()
+        if (vektor_self // vektor_other):
+            return (duzina.A.pripada_duzini(self)
+                    or duzina.B.pripada_duzini(self)
+                    or self.A.pripada_duzini(duzina)
+                    or self.B.pripada_duzini(duzina))
+
+        t = ((self.A.x * (duzina.B.y - duzina.A.y)
+             + duzina.A.x * (self.A.y - duzina.B.y)
+             + duzina.B.x * (duzina.A.y - self.A.y))
              / (vektor_other.vektorski_produkt(vektor_self)))
 
-        s = ((self.A.x * (other.A.y - self.B.y)
-             + self.B.x * (self.A.y - other.A.y)
-             + other.A.x * (self.B.y - self.A.y))
+        s = ((self.A.x * (duzina.A.y - self.B.y)
+             + self.B.x * (self.A.y - duzina.A.y)
+             + duzina.A.x * (self.B.y - self.A.y))
              / (vektor_self.vektorski_produkt(vektor_other)))
 
         if (t >= 0 and t <= 1 and s >= 0 and s <= 1):
@@ -240,6 +391,18 @@ class Duzina:
 
     #Isto kao presjek, ali umjesto True/False, vraća se sjecište, ako postoji
     def sjeciste(self, other):
+        """Vraća sjecište dviju dužina.
+
+        Parametri
+        ---------
+        duzina: Duzina
+
+        Vraća
+        -----
+            :Tocka
+            Ukoliko sjecište ne postoji vraća se prazna točka, a u suprotnom vraća
+            se točka u kojoj se sijeku dviju dužine.
+        """
         vektor_self = self.u_vektor()
         vektor_other = other.u_vektor()
         if (vektor_self // vektor_other):
@@ -270,18 +433,21 @@ class Duzina:
         return Tocka(None,None)
 
     def manja_oridnata(self):
+        """Vraća manju ordinatu dviju krajnih točaka."""
         pom=self.A.y
         if(pom>self.B.y):
             pom=self.B.y
         return pom
 
     def veca_ordinata(self):
+        """Vraća veću ordinatu dviju krajnih točaka."""
         pom = self.A.y
         if (pom < self.B.y):
             pom = self.B.y
         return pom
 
     def simetrala(self):
+        """Vraća simetralu dane dužine."""
         tocka_A = self.A
         tocka_B = self.B
 
@@ -316,41 +482,60 @@ class Duzina:
 
 
 class Vektor:
+    """Prikaz vektora u 2D koordinatnom sustavu.
+
+    Parametri
+    ---------
+    i,j: float
+        Koeficijenti jedničnih vektor koji čine dani vektor.
+
+    """
+
     def __init__(self, i, j):
         self.i = i
         self.j = j
 
-    def __add__(self, other):
-        return Vektor(self.i + other.i, self.j + other.j)
+    def __add__(self, vektor):
+        """Vraća zbroj dvaju vektora."""
+        return Vektor(self.i + vektor.i, self.j + vektor.j)
 
     def __neg__(self):
+        """Vraća vektor pomnožen s negativnim skalarom."""
         return Vektor(-self.i,-self.j)
 
-    def __floordiv__(self, other):
-        return self.vektorski_produkt(other)==0
+    def __floordiv__(self, vektor):
+        """Provjerava jesu li dva vektora paralelna."""
+        return self.vektorski_produkt(vektor)==0
 
     def __repr__(self):
+        """Prikaz objekta klase Vektor"""
         return "(%s , %s)" % (self.i, self.j)
 
     def __str__(self):
+        """Prikaz objekta klase Vektor"""
         return "(%s , %s)" % (self.i, self.j)
 
     def duljina(self):
+        """Vraća duljinu vektora."""
         return (self.i**2+self.j**2)**(1/2)
 
-    def skalarni_produkt(self,other):
-        return self.i*other.i+self.j*other.j
+    def skalarni_produkt(self,vektor):
+        """Vraća skalarni produkt dvaju vektora."""
+        return self.i*vektor.i+self.j*vektor.j
 
-    def vektorski_produkt(self, other):
-        return (self.i) * (other.j) - (other.i) * (self.j)
+    def vektorski_produkt(self, vektor):
+        """Vraća vektorski produkt dvaju vektora."""
+        return (self.i) * (vektor.j) - (vektor.i) * (self.j)
 
-    def kut_izmedu_vektora(self, other):
-        return math.acos(self.skalarni_produkt(other)
-                         / (self.duljina() * other.duljina()))
+    def kut_izmedu_vektora(self, vektor):
+        """Vraća kut između dvaju vektora u radijanima u rasponu od nula do pi."""
+        return math.acos(self.skalarni_produkt(vektor)
+                         / (self.duljina() * vektor.duljina()))
 
-    def kut_izmedu_vektora360(self, other):
-        skalarni_prod = self.skalarni_produkt(other)
-        vektorski_prod = self.vektorski_produkt(other)
+    def kut_izmedu_vektora360(self, vektor):
+        """Vraća kut između dvaju vektora u radijanima u rasponu od nula do 2*pi."""
+        skalarni_prod = self.skalarni_produkt(vektor)
+        vektorski_prod = self.vektorski_produkt(vektor)
         kut = math.atan2(vektorski_prod, skalarni_prod)
         if (kut < 0):
             kut += 2 * math.pi
@@ -358,13 +543,24 @@ class Vektor:
 
 
 class Poligon:
+    """Prikaz poligona u 2D koordinatnom sustavu
+
+    Parametri
+    ---------
+    vrhovi: lista Tocaka
+        Skup točaka čijim spajanjem po redu dobivamo željeni poligon.
+
+    """
+
     def __init__(self,vrhovi):
         self.vrhovi=vrhovi
 
     def broj_vrhova(self):
+        """Vraća broj vrhova poligona."""
         return len(self.vrhovi)
 
     def rubovi(self):
+        """Vraća rubove poligona."""
         br_duzina=self.broj_vrhova()
         rubovi = []
         for i in range(0, br_duzina):
@@ -376,34 +572,37 @@ class Poligon:
 
     # IZVOR: [An algorithm for computing the union,
     # intersection or difference of two polygons]
-    def bool_operacije(self, other, operacija):
+    def bool_operacije(self, drugi_poligon, operacija):
+        """Izvršava Booleove operacije nad danim poligonima.
+
+        """
         # 1|. Promijena orijentacije po potrebi
         if (operacija == -1):
             fragmenti_za_zadrzati_self = -1
             fragmenti_za_zadrzati_other = 1
-            if (self.orijentacija() == other.orijentacija()):
+            if (self.orijentacija() == drugi_poligon.orijentacija()):
                 self.promijeni_orijentaciju()
 
         elif (operacija == 0):
             fragmenti_za_zadrzati_self = -1
             fragmenti_za_zadrzati_other = -1
-            if (self.orijentacija() != other.orijentacija()):
+            if (self.orijentacija() != drugi_poligon.orijentacija()):
                 self.promijeni_orijentaciju()
 
         elif (operacija == 1):
             fragmenti_za_zadrzati_self = 1
             fragmenti_za_zadrzati_other = 1
-            if (self.orijentacija() != other.orijentacija()):
+            if (self.orijentacija() != drugi_poligon.orijentacija()):
                 self.promijeni_orijentaciju()
 
         # 2|. Klasifikacija točaka
         pom_tocke_p_1 = [
-            PomTocka(i, i.pripada_poligonu(other))
+            PomTocka(i, i.pripada_poligonu(drugi_poligon))
             for i in self.vrhovi
             ]
         pom_tocke_p_2 = [
             PomTocka(i, i.pripada_poligonu(self))
-            for i in other.vrhovi
+            for i in drugi_poligon.vrhovi
             ]
 
         # 3|. Pronalaženje sjecišta
@@ -420,7 +619,7 @@ class Poligon:
         # 4|. Klasifikacija edge fragmenata
 
         razvrstani_fragmenti = (tocke_u_fragmente(pom_tocke_p_1,
-                                                 other,
+                                                 drugi_poligon,
                                                  fragmenti_za_zadrzati_self,
                                                  operacija)
                                + tocke_u_fragmente(pom_tocke_p_2,
@@ -448,6 +647,9 @@ class Poligon:
 
     # zašto ovo radi - [https://www.baeldung.com/cs/2d-polygon-area]
     def orijentacija(self):
+        """
+
+        """
         zbroj = 0
         br_tocaka = self.broj_vrhova()
         for i in range(br_tocaka):
@@ -458,6 +660,9 @@ class Poligon:
         return -1+(zbroj>0)*2
 
     def promijeni_orijentaciju(self):
+        """
+
+        """
         obrnuti_redoslijed_tocaka = []
         br_tocaka=self.broj_vrhova()
         for i in range(br_tocaka):
@@ -466,15 +671,27 @@ class Poligon:
         return Poligon(obrnuti_redoslijed_tocaka)
 
     def __sub__(self, other):
+        """
+
+        """
         return self.bool_operacije(other, -1)
 
     def __add__(self, other):
+        """
+
+        """
         return self.bool_operacije(other, 0)
 
     def __mul__(self, other):
+        """
+
+        """
         return self.bool_operacije(other, 1)
 
     def min_x(self):
+        """
+
+        """
         pom=self.vrhovi[0].x
         for i in self.vrhovi:
             if(i.x<pom):
@@ -482,6 +699,9 @@ class Poligon:
         return pom
 
     def max_x(self):
+        """
+
+        """
         pom=self.vrhovi[0].x
         for i in self.vrhovi:
             if(i.x>pom):
@@ -489,6 +709,9 @@ class Poligon:
         return pom
 
     def min_y(self):
+        """
+
+        """
         pom=self.vrhovi[0].y
         for i in self.vrhovi:
             if(i.y<pom):
@@ -496,6 +719,9 @@ class Poligon:
         return pom
 
     def max_y(self):
+        """
+
+        """
         pom=self.vrhovi[0].y
         for i in self.vrhovi:
             if(i.y>pom):
@@ -503,34 +729,81 @@ class Poligon:
         return pom
 
     def __repr__(self):
+        """
+
+        """
         string = ""
         for t in self.vrhovi:
             string+="(%s , %s) " % (t.x, t.y)
         return string
 
     def __str__(self):
+        """
+
+        """
         string = ""
         for t in self.vrhovi:
             string += "(%s , %s) " % (t.x, t.y)
         return string
 
 class VoronoiCelija:
-    def __init__(self, Tocka,Poligon):
-        self.Tocka = Tocka
-        self.Poligon = Poligon
+    """Prikaz Voronojeve ćelije
+
+    #12345678901234567890123456789012345678901234567890123456789012345678902345
+    Parametri
+    ---------
+    tocka: Tocka
+        Prikaz točke koju koju okružuje Voronoi ćelija.
+    poligon: Poligon
+        Poligon koji predstavlja rubove Voronoi ćelije.
+
+    """
+
+    def __init__(self, tocka,poligon):
+        self.tocka = tocka
+        self.poligon = poligon
 
 class PomTocka:
+    """Pomoćna klasa sa položajem točke u poligonu.
+
+    Pomoćna klasa za izvođenje Booleovih operacija koja sadrži neki objekt
+    klase Tocka i njen položaj u odnosu na poligon (unutri, na rubu, vani).
+
+    Parametri
+    ---------
+        tocka: Tocka
+        polozaj: int
+            Položaj točke u odnosu na neki poligon, odnosno nalazi li se
+            točka unutar, izvan ili na rubu nekog poligona.
+    """
+
     def __init__(self,tocka,polozaj):
         self.tocka=tocka
         self.polozaj=polozaj
 
 class PomDuzina:
+    """Pomoćna klasa sa položajem dužine u poligonu.
+
+    Pomoćna klasa za izvođenje Booleovih operacija koja sadrži neki objekt
+    klase Duzina i njen položaj u odnosu na poligon (unutri, na rubu, vani).
+
+    Parametri
+    ---------
+        duzina: Duzina
+        polozaj: int
+            Položaj duzine u odnosu na neki poligon, odnosno nalazi li se
+            točka unutar, izvan ili je rub nekog poligona.
+    """
+
     def __init__(self,duzina,polozaj):
         self.duzina=duzina
         self.polozaj=polozaj
 
 
 def pom_tocke_sjecista(pom_tocke_p_1,pom_tocke_p_2):
+    """
+
+    """
     br_p_1 = len(pom_tocke_p_1)
     br_p_2 = len(pom_tocke_p_2)
 
@@ -568,6 +841,9 @@ def pom_tocke_sjecista(pom_tocke_p_1,pom_tocke_p_2):
 
 
 def tocke_u_fragmente(pom_tocke_p_1,p_2,trazeni_polozaj,operacija):
+    """
+
+    """
     fragmenti = []
     br_p_1=len(pom_tocke_p_1)
     for i in range(br_p_1):
@@ -596,6 +872,9 @@ def tocke_u_fragmente(pom_tocke_p_1,p_2,trazeni_polozaj,operacija):
 
 
 def povezi_fragmente(razvrstani_fragmenti):
+    """
+
+    """
     povezani_fragmenti=[]
     while (len(razvrstani_fragmenti) > 0):
 
@@ -617,42 +896,5 @@ def povezi_fragmente(razvrstani_fragmenti):
 
         povezani_fragmenti.append(novi_poligon)
     return povezani_fragmenti
-
-
-def generiraj_broj(max=10):
-    return (random.random() * 1000 % 2*max - max)
-
-
-def nasumicna_tocka(max=10):
-    return Tocka(generiraj_broj(max),generiraj_broj(max))
-
-
-def nasumicne_tocke(broj_tocaka,max=10):
-    tocke=[]
-    while(len(tocke)<broj_tocaka and len(tocke)!=(2*max-1)*(2*max-1)):
-        tocke.append(nasumicna_tocka(max))
-        tocke=list(set(tocke))
-    return tocke
-
-
-def nasumicna_duzina(max=10):
-    A = nasumicna_tocka(max)
-    B = nasumicna_tocka(max)
-    while(A==B):
-        B=nasumicna_tocka(max)
-
-    return Duzina(A,B)
-
-
-def nasumicne_duzine(broj_duzina,max=10):
-    duzine=[]
-    while(len(duzine)<broj_duzina):
-        duzine.append(nasumicna_duzina(max))
-        duzine =list(set(duzine))
-    return duzine
-
-
-def nasumicni_poligon(broj_vrhova,max=10):
-    return Poligon(nasumicne_tocke(broj_vrhova,max))
 
 

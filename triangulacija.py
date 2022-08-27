@@ -1,3 +1,5 @@
+"""Sadrži funkciju za triangulaciju skupa točaka.
+"""
 from klase import *
 # Ovo je "pohlepna" implementacija triangulacije.  Prvo nađemo sve
 # dužine koje mogu postojati između točaka u danom skupu točaka.  Nakon
@@ -9,6 +11,9 @@ from klase import *
 
 
 def triangulacija(tocke):
+    """
+
+    """
     tocke = list(set(tocke))
     broj_tocaka = len(tocke)
 

@@ -1,6 +1,7 @@
+"""Sadrži funkcije za izradu Voronojevog dijagrama
+"""
 from konveksnaljuska import *
 
-#12345678901234567890123456789012345678901234567890123456789012345678902
 # Prvo uklanjamo duplikatne točke u danom skupu.  Ako su zadane samo
 # dvije točke, koristimo poseban algoritam koji stvara samo jednu
 # simetralu i dijeli prostor na dva četverokuta:
@@ -75,6 +76,9 @@ from konveksnaljuska import *
 
 
 def ukloni_iste_tocke(skup_tocaka):
+    """
+
+    """
     pom_lista = []
     for tocka1 in range(0, len(skup_tocaka)):
         duplikat = False
@@ -88,6 +92,9 @@ def ukloni_iste_tocke(skup_tocaka):
     return pom_lista
 
 def uklanjanje_rubova(rubovi,za_ukloniti):
+    """
+
+    """
     for rub in za_ukloniti:
         for rub2 in rubovi:
             if (rub == rub2):
@@ -96,6 +103,9 @@ def uklanjanje_rubova(rubovi,za_ukloniti):
 
 
 def voronoi_za_dvije_tocke(prva_tocka,druga_tocka):
+    """
+
+    """
     celije_dijagrama = []
     rub = Duzina(prva_tocka, druga_tocka).simetrala()
 
@@ -139,6 +149,9 @@ def voronoi_za_dvije_tocke(prva_tocka,druga_tocka):
     return celije_dijagrama
 
 def voronoi(tocke):
+    """
+
+    """
 
     tocke = list(set(tocke))
 
@@ -212,7 +225,6 @@ def voronoi(tocke):
                         else:
                             lijeva_polovica_trenutne_simetrale = Duzina(sjeciste, trenutna_simetrala.A)
                             desna_polovica_trenutna_simetrale = Duzina(sjeciste, trenutna_simetrala.B)
-
 
                             trenutna_tocka_je_na_lijevoj_strani = trenutna_tocka.lijevo_od(tocan_dio_postojeceg_ruba)
 

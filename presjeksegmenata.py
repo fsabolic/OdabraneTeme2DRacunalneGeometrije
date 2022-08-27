@@ -1,4 +1,11 @@
+"""Sadrži funkciju za određivanje presjeka skupa dužina.
+"""
+
+
 def presjek_segmenata(duzine):
+    """
+
+    """
     sjecista=[]
     br_duzina=len(duzine)
     for i in range(br_duzina):

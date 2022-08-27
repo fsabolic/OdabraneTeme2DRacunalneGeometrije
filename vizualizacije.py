@@ -1,19 +1,91 @@
-from konveksnaljuska import *
+"""Sadrži funkcije za vizualizaciju i testiranje algoritama ostalih modula.
+
+Modul sadrži nekoliko funkcija za izradu objekata klasa s nasumičnim
+vrijednostima u svrhu testiranja. Za određeni skup algoritama implementirane
+su vizualizacije za koje se mogu zadati parametri algoritma i funkcije za
+testiranje algoritama.
+
+"""
 from presjeksegmenata import *
 from voronoi import *
 from triangulacija import *
 import matplotlib.pyplot as plt
+import random
+
+def generiraj_broj(max=10):
+    """
+
+    """
+    return (random.random() * 1000 % 2*max - max)
+
+
+def nasumicna_tocka(max=10):
+    """
+
+    """
+    return Tocka(generiraj_broj(max),generiraj_broj(max))
+
+
+def nasumicne_tocke(broj_tocaka,max=10):
+    """
+
+    """
+    tocke=[]
+    while(len(tocke)<broj_tocaka and len(tocke)!=(2*max-1)*(2*max-1)):
+        tocke.append(nasumicna_tocka(max))
+        tocke=list(set(tocke))
+    return tocke
+
+
+def nasumicna_duzina(max=10):
+    """
+
+    """
+    A = nasumicna_tocka(max)
+    B = nasumicna_tocka(max)
+    while(A==B):
+        B=nasumicna_tocka(max)
+
+    return Duzina(A,B)
+
+
+def nasumicne_duzine(broj_duzina,max=10):
+    """
+
+    """
+    duzine=[]
+    while(len(duzine)<broj_duzina):
+        duzine.append(nasumicna_duzina(max))
+        duzine =list(set(duzine))
+    return duzine
+
+
+def nasumicni_poligon(broj_vrhova,max=10):
+    """
+
+    """
+    return Poligon(nasumicne_tocke(broj_vrhova,max))
+
 
 def nacrtaj_tocku(tocka,boja=None,marker=None):
+    """
+
+    """
     plt.scatter(tocka.x, tocka.y, color=boja, marker=marker,zorder=3)
 
 
 def nacrtaj_tocke(tocke,boja=None,marker=None):
+    """
+
+    """
     for tocka in tocke:
         nacrtaj_tocku(tocka,boja,marker)
 
 
 def nacrtaj_duzinu(duzina,boja=None,debljina=None):
+    """
+
+    """
     plt.plot([duzina.A.x, duzina.B.x],
              [duzina.A.y, duzina.B.y],
              color=boja,
@@ -23,6 +95,9 @@ def nacrtaj_duzinu(duzina,boja=None,debljina=None):
 
 
 def nacrtaj_duzine(duzine,boja=None,debljina=None):
+    """
+
+    """
     for duzina in duzine:
         nacrtaj_duzinu(duzina,boja)
 
@@ -32,6 +107,9 @@ def nacrtaj_poligon(poligon,
                     boja_rubova=None,
                     transparentnost=None
                     ):
+    """
+
+    """
     poligon=poligon.vrhovi
     plt.fill([vrh.x for vrh in poligon],
              [vrh.y for vrh in poligon],
@@ -42,6 +120,9 @@ def nacrtaj_poligon(poligon,
 
 
 def v_presjek_segmenata(duzine):
+    """
+
+    """
     nacrtaj_duzine(duzine,None,2)
 
     sjecista = presjek_segmenata(duzine)
@@ -51,6 +132,9 @@ def v_presjek_segmenata(duzine):
 
 
 def v_tocka_u_poligonu(tocke,poligon):
+    """
+
+    """
     nacrtaj_poligon(poligon,"lightblue","blue")
     nacrtaj_tocke(poligon.vrhovi,"blue")
     for tocka in tocke:
@@ -66,6 +150,9 @@ def v_tocka_u_poligonu(tocke,poligon):
 
 
 def v_tocka_u_poligonu_wn(tocke,poligon):
+    """
+
+    """
     nacrtaj_poligon(poligon,"lightblue","blue")
     nacrtaj_tocke(poligon.vrhovi,"blue")
 
@@ -82,6 +169,9 @@ def v_tocka_u_poligonu_wn(tocke,poligon):
 
 
 def v_konveksna_ljuska(tocke):
+    """
+
+    """
     tocke_ljuske=konveksna_ljuska(tocke)
     poligon_ljuske = Poligon(tocke_ljuske)
 
@@ -93,6 +183,9 @@ def v_konveksna_ljuska(tocke):
 
 
 def v_unija(p_1,p_2):
+    """
+
+    """
     unija  = p_1+p_2
 
     nacrtaj_poligon(p_1,"lightblue","none",0.6)
@@ -105,6 +198,9 @@ def v_unija(p_1,p_2):
     plt.show()
 
 def v_razlika(p_1,p_2):
+    """
+
+    """
     razlika = p_1 - p_2
 
     nacrtaj_poligon(p_2,"orangered","red",0.35)
@@ -117,6 +213,9 @@ def v_razlika(p_1,p_2):
     plt.show()
 
 def v_presjek(p_1,p_2):
+    """
+
+    """
     presjek = p_1*p_2
 
     nacrtaj_poligon(p_2,"blue","none",0.4)
@@ -130,6 +229,9 @@ def v_presjek(p_1,p_2):
 
 
 def v_triangulacija(tocke):
+    """
+
+    """
     triang_duzine = triangulacija(tocke)
 
     nacrtaj_duzine(triang_duzine,"dimgray")
@@ -138,16 +240,19 @@ def v_triangulacija(tocke):
     plt.show()
 
 def v_voronoi(tocke):
+    """
+
+    """
     celije_dijagrama = voronoi(tocke)
 
 
     for celija in celije_dijagrama:
-        vrhovi_poligona = celija.Poligon.vrhovi
+        vrhovi_poligona = celija.poligon.vrhovi
         plt.fill([vrh.x for vrh in vrhovi_poligona],
                  [vrh.y for vrh in vrhovi_poligona],
                  alpha=0.15)
 
-        nacrtaj_duzine(celija.Poligon.rubovi(),"black")
+        nacrtaj_duzine(celija.poligon.rubovi(),"black")
 
     nacrtaj_tocke(tocke,"red",".")
 
@@ -158,51 +263,77 @@ def v_voronoi(tocke):
     plt.show()
 
 def v_presjek_segmenata_test(br_duzina):
+    """
+
+    """
     duzine = nasumicne_duzine(br_duzina,1000)
     v_presjek_segmenata(duzine)
 
 def v_tocka_u_poligonu_test(br_tocaka):
+    """
+
+    """
     tocke = nasumicne_tocke(br_tocaka)
     poligon = nasumicni_konveksni_poligon()
     v_tocka_u_poligonu(tocke,poligon)
     plt.show()
 
 def v_tocka_u_poligonu_wn_test(br_tocaka):
+    """
+
+    """
     tocke = nasumicne_tocke(br_tocaka)
     poligon = nasumicni_konveksni_poligon()
     v_tocka_u_poligonu(tocke,poligon)
     plt.show()
 
 def v_konveksna_ljuska_test(br_tocaka):
+    """
+
+    """
     tocke= nasumicne_tocke(br_tocaka)
     v_konveksna_ljuska(tocke)
 
 
 
 def v_razlika_test():
-   p1 = nasumicni_konveksni_poligon()
-   p2 = nasumicni_konveksni_poligon()
-   v_razlika(p1,p2)
+    """
+
+    """
+    p1 = nasumicni_konveksni_poligon()
+    p2 = nasumicni_konveksni_poligon()
+    v_razlika(p1,p2)
 
 def v_unija_test():
-   p1 = nasumicni_konveksni_poligon()
-   p2 = nasumicni_konveksni_poligon()
-   v_unija(p1,p2)
+    """
+
+    """
+    p1 = nasumicni_konveksni_poligon()
+    p2 = nasumicni_konveksni_poligon()
+    v_unija(p1,p2)
 
 def v_presjek_test():
-   p1 = nasumicni_konveksni_poligon()
-   p2 = nasumicni_konveksni_poligon()
-   v_presjek(p1,p2)
+    """
+
+    """
+    p1 = nasumicni_konveksni_poligon()
+    p2 = nasumicni_konveksni_poligon()
+    v_presjek(p1,p2)
 
 
 
 def v_triangulacija_test(br_tocaka):
+    """
 
+    """
     tocke = nasumicne_tocke(br_tocaka)
 
     v_triangulacija(tocke)
 
 def v_triangulacija_voronoi_test(br_tocaka):
+    """
+
+    """
     tocke = nasumicne_tocke(br_tocaka)
     triang_duzine = triangulacija(tocke)
 
@@ -211,12 +342,12 @@ def v_triangulacija_voronoi_test(br_tocaka):
     celije_dijagrama = voronoi(tocke)
 
     for celija in celije_dijagrama:
-        vrhovi_poligona = celija.Poligon.vrhovi
+        vrhovi_poligona = celija.poligon.vrhovi
         plt.fill([vrh.x for vrh in vrhovi_poligona],
                  [vrh.y for vrh in vrhovi_poligona],
                  alpha=0.15)
 
-        nacrtaj_duzine(celija.Poligon.rubovi(), "black")
+        nacrtaj_duzine(celija.poligon.rubovi(), "black")
 
     nacrtaj_tocke(tocke, "red", ".")
 
@@ -232,11 +363,16 @@ def v_triangulacija_voronoi_test(br_tocaka):
 
 
 def v_voronoi_test(broj_tocaka):
+    """
 
+    """
     tocke=nasumicne_tocke(broj_tocaka)
     v_voronoi(tocke)
 
 
 def nasumicni_konveksni_poligon():
+    """
+
+    """
     poligon = nasumicni_poligon(abs(generiraj_broj()) + 3).vrhovi
     return Poligon(konveksna_ljuska(poligon))

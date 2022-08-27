@@ -1,7 +1,17 @@
+"""Sadrži funkcije za određivanje konveksne ljuske.
+
+Modul sadrži implementaciju Graham Scan algoritma za traženje konveksne
+ljuske.
+
+
+"""
 from klase import *
 
 
 def pronadi_indeks_najnize_tocke(tocke):
+    """
+
+    """
     br_tocaka = len(tocke)
     indeks_najmanje_tocke = 0
 
@@ -16,6 +26,9 @@ def pronadi_indeks_najnize_tocke(tocke):
 
 
 def konveksna_ljuska(tocke):
+    """
+
+    """
     br_tocaka = len(tocke)
 
     if(br_tocaka<2):
