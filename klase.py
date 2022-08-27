@@ -91,7 +91,7 @@ class Tocka:
         return self == Tocka(None, None)
 
     def mnozenje_skalarom(self, skalar):
-        """Vraća danu točku čije koordinate su pomnožene sklarom.
+        """Vraća danu točku čije koordinate su pomnožene skalarom.
 
         Parametri
         ---------
@@ -124,25 +124,6 @@ class Tocka:
         tocka = Duzina(duzina.B, self).u_vektor()
         return vektor.vektorski_produkt(tocka) > 0
 
-    # Prvo provjeravamo je li dana točka 'self'  jedna od točaka koja
-    # omeđuje danu dužinu 'duzina'.  Danu dužinu 'duzina' pretvaramo u
-    # vektor, a danu točku 'self' povezujemo s prvom točkom dane dužine
-    # 'duzina' kako bi dobili novu dužinu.  Novonastalu dužinu pretvaramo u
-    # vektor kako bi mogli izračunati vektorski produkt dviju dužina (sada
-    # vektora).  Ako je vektorski produkt različit od nule, znači da dva
-    # dana vektora nisu kolinearna pa ni dana točka ne pripada danoj dužini.
-    # Određujemo duljinu dane dužine 'duzina' (ali ju ne korjenujemo pa
-    # imamo "kvadratnu duljinu" dužine).  Određujemo skalarni produkt v1 i
-    # v2 kako bi dobili duljinu ortagonalne projekcije (ali skalarni produkt
-    # ne dijelimo s umnoškom duljina v1 i v2 pa dobijemo nešto kao "kvaratnu
-    # duljinu").  Ako je kvadratna duljina == skalarni produkt, tada je
-    # v1==v2, a ako je kvadratna duljina veća, tada v2 pripada v1, odnosno
-    # točka pripada dužini.  Ako je skalarni produkt manji od 0 (negativna
-    # je) tada je točka izvan dane dužine (na 'lijevo').  Ako je skalarni
-    # produkt veći od kvadratne duljine, tada je točka izvan dane dužine (na
-    # 'desno').
-    #
-    # IZVOR: [https://bit.ly/3R0hIBk]
     def pripada_duzini(self, duzina):
         """Provjerava nalazi li se točka na danoj dužini."""
         if self in (duzina.A, duzina.B):
@@ -160,42 +141,10 @@ class Tocka:
         kvadratna_duljina = v_1.i**2 + v_1.j**2
         return not skalarni_produkt > kvadratna_duljina
 
-    # Za određivanje pripadnosti točke poligonu, iz dane točke se "povlači"
-    # dužina paralelno s apcisom i provjerava se je li broj sjecišta između
-    # te dužine i stranica poligona paran ili neparan.  Dužina
-    # 'duzina_za_presjek' se sastoji od dane točke 'self' i najveće apcise
-    # danog poligona 'poligon'.  Dužinu 'duzina_za_presjek' sječemo sa svim
-    # stranicama poligona.  Ukoliko dužina 'duzina_za_presjek' nije paralelna
-    # s danom stranicom poligona, traži se sjecište između dužine i stranice.
-    # Sjecište se dodaje u ukupan zbroj sjecišta samo ako ono nije jedan od
-    # vrhova poligona ILI ako sjecište jest jedan od vrhova poligona, ali taj
-    # vrh je točka s manjom ordinatom stranice poligona.
-    #
-    # Moguće kombinacije stranica koje čine vrhove su /\, \/, <,>:
-        # /\ ako se sjeće ovaj vrh, sjecištu se dodaje 0
-        # (ne mijenja se parnost sjecišta)
-        # \/ ako se sjeće ovaj vrh, sjecištu se dodaje 2
-        # (ne mijenja se parnost sjecišta)
-        # < ako se sjeće ovaj vrh, sjecištu se dodaje 1
-        # (mijenja se parnost sjecišta)
-        # > ako se sjeće ovaj vrh, sjecištu se dodaje 1
-        # (mijenja se parnost sjecišta)
-    #
-    # Ukoliko su stranica i dužina 'duzina_za_presjek' paralelne, provjerava
-    # se pripada li dana točka 'self' toj stranici poligona ili je točka
-    # 'self' jedna od vrhova poligona.  Na kraju se provjerava je li broj
-    # sjecišta paran (točka je van poligona) ili neparan (točka je u
-    # poligonu).
-    #
-    # 0 - Točka je na rubu poligona
-    # 1 - Točka je unutar poligona
-    # -1 - Točka je izvan poligona
-    #
-    # IZVOR: [Computational Geometry: An Introduction, 41. str]
     def pripada_poligonu(self, poligon):
         """Provjerava nalazi li se točka unutar nekog poligona.
 
-        Algoritam se izvrašva pomoću Ray Casting algoritma.
+        Algoritam se izvršava pomoću Ray Casting algoritma.
 
         Parametri
         ---------
@@ -218,12 +167,12 @@ class Tocka:
         for rub in rubovi_poligona:
             if self.pripada_duzini(rub):
                 return 0
-            elif not rub.u_vektor() // duzina_za_presjek.u_vektor():
+            if not rub.u_vektor() // duzina_za_presjek.u_vektor():
                 sjec = duzina_za_presjek.sjeciste(rub)
                 if not sjec.prazna():
-                    if (((sjec == rub.A or sjec == rub.B)
-                         and sjec.y == rub.manja_oridnata())
-                            or (sjec != rub.A and sjec != rub.B)):
+                    if (sjec in (rub.A, rub.B)
+                            and sjec.y == rub.manja_oridnata()
+                            or sjec not in (rub.A, rub.B)):
                         sjecista += 1
 
         return 1 + (sjecista % 2 == 0) * -2
@@ -231,7 +180,7 @@ class Tocka:
     def pripada_poligonu_wn(self, poligon):
         """Provjerava nalazi li se točka unutar nekog poligona.
 
-        Algoritam se izvrašva pomoću Winding Number algoritma.
+        Algoritam se izvršava pomoću Winding Number algoritma.
 
         Parametri
         ---------
@@ -318,7 +267,7 @@ class Duzina:
     Iznimke
     -------
     IstekKrajnjeTockeError
-        Javlja se kada je dužina inicijalizirana s dvije kranje točke koje
+        Javlja se kada je dužina inicijalizirana s dvije krajnje točke koje
         imaju jednake vrijednosti x i y koordinata.
     """
 
@@ -348,18 +297,6 @@ class Duzina:
     def u_vektor(self):
         """Pretvara objekt klase Duzina u objekt klase Vektor"""
         return Vektor((self.B - self.A).x, (self.B - self.A).y)
-
-    # Ukoliko su dvije dužine paralelne, provjeravamo pripadaju li vrhovi
-    # jedne dužine drugoj.  U suprotnome, računamo t i s.  t i s
-    # predstavljaju koeficijente u jednadžbama dužina koji se kreću
-    # od 0 do 1
-    # [ pi = p1 + t(p2 - p1), pi = p3 + s(p4 - p3) ].
-    #
-    # pi - točka na dužini
-    # p1,p2,p3,p4 - pozicijski vektori/točke
-    #
-    # Ako je 0<t,s<1 tada se dvije dužine sjeku.
-    # IZVOR: [Mathematics for Computer Graphics, 274. str]
 
     def presjek(self, duzina):
         """Provjerava sijeku li se dvije dužine.
@@ -395,7 +332,6 @@ class Duzina:
 
         return False
 
-    # Isto kao presjek, ali umjesto True/False, vraća se sjecište, ako postoji
     def sjeciste(self, other):
         """Vraća sjecište dviju dužina.
 
@@ -439,14 +375,14 @@ class Duzina:
         return Tocka(None, None)
 
     def manja_oridnata(self):
-        """Vraća manju ordinatu dviju krajnih točaka."""
+        """Vraća manju ordinatu dviju krajnjih točaka."""
         pom = self.A.y
         if pom > self.B.y:
             pom = self.B.y
         return pom
 
     def veca_ordinata(self):
-        """Vraća veću ordinatu dviju krajnih točaka."""
+        """Vraća veću ordinatu dviju krajnjih točaka."""
         pom = self.A.y
         if pom < self.B.y:
             pom = self.B.y
@@ -494,7 +430,7 @@ class Vektor:
     Parametri
     ---------
     i,j: float
-        Koeficijenti jedničnih vektor koji čine dani vektor.
+        Koeficijenti jediničnih vektor koji čine dani vektor.
 
     """
 
@@ -577,8 +513,6 @@ class Poligon:
             rubovi.append(rub)
         return rubovi
 
-    # IZVOR: [An algorithm for computing the union,
-    # intersection or difference of two polygons]
     def bool_operacije(self, drugi_poligon, operacija):
         """Izvršava Booleove operacije nad danim poligonima.
 
@@ -666,7 +600,6 @@ class Poligon:
 
         return rjesenje
 
-    # zašto ovo radi - [https://www.baeldung.com/cs/2d-polygon-area]
     def orijentacija(self):
         """Vraća orijentaciju vrhova poligona."""
         zbroj = 0
@@ -679,7 +612,7 @@ class Poligon:
         return -1 + (zbroj > 0) * 2
 
     def promijeni_orijentaciju(self):
-        """Mijenja orijantaciju vrhova poligona.
+        """Mijenja orijentaciju vrhova poligona.
 
         Vraća
         -----
@@ -706,7 +639,7 @@ class Poligon:
         return self.bool_operacije(other, 1)
 
     def min_x(self):
-        """Vraća najmanju apcisu svih vrhova poligona"""
+        """Vraća najmanju apscisu svih vrhova poligona"""
         pom = self.vrhovi[0].x
         for i in self.vrhovi:
             if i.x < pom:
@@ -714,7 +647,7 @@ class Poligon:
         return pom
 
     def max_x(self):
-        """Vraća najveću apcisu svih vrhova poligona"""
+        """Vraća najveću apscisu svih vrhova poligona"""
         pom = self.vrhovi[0].x
         for i in self.vrhovi:
             if i.x > pom:
@@ -755,11 +688,10 @@ class Poligon:
 class VoronoiCelija:
     """Prikaz Voronojeve ćelije
 
-    #12345678901234567890123456789012345678901234567890123456789012345678902345
     Parametri
     ---------
     tocka: Tocka
-        Prikaz točke koju koju okružuje Voronoi ćelija.
+        Prikaz točke koju okružuje Voronoi ćelija.
 
     poligon: Poligon
         Poligon koji predstavlja rubove Voronoi ćelije.
@@ -775,7 +707,7 @@ class PomTocka:
     """Pomoćna klasa sa položajem točke u poligonu.
 
     Pomoćna klasa za izvođenje Booleovih operacija koja sadrži neki objekt
-    klase Tocka i njen položaj u odnosu na poligon (unutri, na rubu, vani).
+    klase Tocka i njen položaj u odnosu na poligon (unutra, na rubu, vani).
 
     Parametri
     ---------
@@ -795,7 +727,7 @@ class PomDuzina:
     """Pomoćna klasa sa položajem dužine u poligonu.
 
     Pomoćna klasa za izvođenje Booleovih operacija koja sadrži neki objekt
-    klase Duzina i njen položaj u odnosu na poligon (unutri, na rubu, vani).
+    klase Duzina i njen položaj u odnosu na poligon (unutra, na rubu, vani).
 
     Parametri
     ---------
@@ -817,7 +749,7 @@ def pom_tocke_sjecista(pom_tocke_p_1, pom_tocke_p_2):
     Parametri
     ---------
     pom_tocke_p_1,pom_tocke_p_2: lista PomTocaka
-        Predstavalju poredane vrhove poligona sa svojim položajima u odnosu na
+        Predstavljaju poredane vrhove poligona sa svojim položajima u odnosu na
         drugi poligon
 
     Vraća

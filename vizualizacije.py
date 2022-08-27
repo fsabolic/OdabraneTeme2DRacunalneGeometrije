@@ -70,7 +70,7 @@ def nasumicni_poligon(broj_vrhova, maks=10):
 
 
 def nacrtaj_tocku(tocka, boja=None, marker=None):
-    """Prikazuje točku pomoću matplotbib paketa.
+    """Prikazuje točku pomoću matplotlib paketa.
 
     Parametri
     ---------
@@ -85,7 +85,7 @@ def nacrtaj_tocku(tocka, boja=None, marker=None):
 
 
 def nacrtaj_tocke(tocke, boja=None, marker=None):
-    """Prikazuje skup točaka pomoću matplotbib paketa.
+    """Prikazuje skup točaka pomoću matplotlib paketa.
 
     Parametri
     ---------
@@ -101,7 +101,7 @@ def nacrtaj_tocke(tocke, boja=None, marker=None):
 
 
 def nacrtaj_duzinu(duzina, boja=None, debljina=None):
-    """Prikazuje dužinu pomoću matplotbib paketa.
+    """Prikazuje dužinu pomoću matplotlib paketa.
 
     Parametri
     ---------
@@ -121,7 +121,7 @@ def nacrtaj_duzinu(duzina, boja=None, debljina=None):
 
 
 def nacrtaj_duzine(duzine, boja=None, debljina=None):
-    """Prikazuje skup dužina pomoću matplotbib paketa.
+    """Prikazuje skup dužina pomoću matplotlib paketa.
 
     Parametri
     ---------
@@ -141,7 +141,7 @@ def nacrtaj_poligon(poligon,
                     boja_rubova=None,
                     transparentnost=None
                     ):
-    """Prikazuje poligon pomoću matplotbib paketa.
+    """Prikazuje poligon pomoću matplotlib paketa.
 
     Parametri
     ---------
@@ -319,7 +319,7 @@ def v_tocka_u_poligonu_wn_test(br_tocaka):
 
 
 def v_konveksna_ljuska_test(br_tocaka):
-    """Vizulizira konveksnu ljusku za dani broj nasumičnih točaka."""
+    """Vizualizira konveksnu ljusku za dani broj nasumičnih točaka."""
     tocke = nasumicne_tocke(br_tocaka)
     v_konveksna_ljuska(tocke)
 

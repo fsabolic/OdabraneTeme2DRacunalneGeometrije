@@ -1,13 +1,6 @@
 """Sadrži funkciju za triangulaciju skupa točaka.
 """
 from klase import *
-# Ovo je "pohlepna" implementacija triangulacije.  Prvo nađemo sve
-# dužine koje mogu postojati između točaka u danom skupu točaka.  Nakon
-# toga, sortiramo ih po duljini.  Na kraju, po redu uzimamo dužine i
-# pohranjujemo ih kao dijelove triangulacije, osim ako postoji sjecište
-# između odabrane dužine i neke dužine koja se nalazi u skupu već
-# odabranih dužina.
-# IZVOR: [Computational Geometry - An Introduction, 235. str]
 
 
 def triangulacija(tocke):
