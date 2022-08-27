@@ -3,9 +3,7 @@
 
 
 class IsteKrajnjeTockeError(Exception):
-    """Iznimka za dvije iste kranje točke dužine.
-
-    """
+    """Iznimka za dvije iste kranje točke dužine."""
 
     def __init__(self):
         """
@@ -16,9 +14,7 @@ class IsteKrajnjeTockeError(Exception):
 
 
 class PremaloTocakaError(Exception):
-    """Iznimka za premalen zadan skup točaka.
-
-    """
+    """Iznimka za premalen zadan skup točaka."""
 
     def __init__(self, poruka):
         """

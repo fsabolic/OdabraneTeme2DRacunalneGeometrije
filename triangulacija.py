@@ -11,9 +11,7 @@ from klase import *
 
 
 def triangulacija(tocke):
-    """
-
-    """
+    """Vraća listu dužina koje predstavljaju triangulaciju skupa točaka."""
     tocke = list(set(tocke))
     broj_tocaka = len(tocke)
 
@@ -40,8 +38,7 @@ def triangulacija(tocke):
                     and sjeciste != potencijalna_duzina.B):
                 postoji_sjeciste = True
 
-        if (not postoji_sjeciste):
+        if not postoji_sjeciste:
             duzine_triangulacije.append(potencijalna_duzina)
 
     return duzine_triangulacije
-

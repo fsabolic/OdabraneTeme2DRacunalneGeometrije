@@ -1,17 +1,12 @@
 """
-
+xcvyxcvyxcvyxcvyx
 """
-import klase
-from vizualizacije import v_presjek_segmenata_test, v_tocka_u_poligonu_test,\
-    v_tocka_u_poligonu_wn_test, v_konveksna_ljuska_test, v_unija_test,\
-    v_razlika_test, v_presjek_test, v_triangulacija_test, v_voronoi_test,\
-    v_triangulacija_voronoi_test
+from vizualizacije import *
 
-from klase import Tocka
 
 def sve(broj):
     """
-
+yxcvyxcvyxcvyxcvyxcvy
     """
     v_presjek_segmenata_test(broj)
     v_tocka_u_poligonu_test(broj)
@@ -24,4 +19,6 @@ def sve(broj):
     v_voronoi_test(broj)
     v_triangulacija_voronoi_test(broj)
 
-sve(10)
+
+generiraj_broj()
+sve(100)
