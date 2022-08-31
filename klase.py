@@ -564,7 +564,6 @@ class Poligon:
                                                   pom_tocke_p_2)
         razvrstane_tocke_p_2 = pom_tocke_sjecista(pom_tocke_p_2,
                                                   pom_tocke_p_1)
-
         pom_tocke_p_1 = razvrstane_tocke_p_1
         pom_tocke_p_2 = razvrstane_tocke_p_2
 

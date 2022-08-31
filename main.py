@@ -20,5 +20,6 @@ def sve(broj):
     v_triangulacija_voronoi_test(broj)
 
 
+while(1):
+    v_presjek_segmenata_test(6)
 
-sve(100)

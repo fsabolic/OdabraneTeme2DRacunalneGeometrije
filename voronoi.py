@@ -55,7 +55,7 @@ def voronoi_za_dvije_tocke(prva_tocka, druga_tocka):
     celije_dijagrama = []
     rub = Duzina(prva_tocka, druga_tocka).simetrala()
 
-    daleka_tocka = 1000000000
+    daleka_tocka = 100000000
 
     granicne_tocke = [Tocka(-daleka_tocka, -daleka_tocka),
                       Tocka(daleka_tocka, -daleka_tocka),
@@ -153,7 +153,6 @@ def voronoi(tocke):
                     if not sjeciste.prazna():
                         postoji_sjeciste = True
                         pronadeno_bar_jedno_sjeciste = True
-# 123456789012345678901234567890123456789012345678901234567890123456789012345678
                         if (postojeci_rub.A ==
                                 sjeciste or postojeci_rub.B == sjeciste):
                             tocan_dio_postojeceg_ruba = postojeci_rub
@@ -166,19 +165,23 @@ def voronoi(tocke):
                             desna_polovica_postojeceg_ruba = Duzina(
                                 postojeci_rub.B, sjeciste)
 
-                            tocan_dio_postojeceg_ruba = lijeva_polovica_postojeceg_ruba
+                            tocan_dio_postojeceg_ruba = \
+                                lijeva_polovica_postojeceg_ruba
 
                             vektor_do_trenutne_točke = Duzina(
                                 sjeciste, trenutna_tocka).u_vektor()
 
-                            kut_između_lpolpostrub_i_vdtt = lijeva_polovica_postojeceg_ruba.u_vektor(
-                            ).kut_izmedu_vektora(vektor_do_trenutne_točke)
-                            kut_između_dpolpostrub_i_vdtt = desna_polovica_postojeceg_ruba.u_vektor(
-                            ).kut_izmedu_vektora(vektor_do_trenutne_točke)
+                            kut_između_lpolpostrub_i_vdtt = \
+                                lijeva_polovica_postojeceg_ruba.u_vektor()\
+                                    .kut_izmedu_vektora(vektor_do_trenutne_točke)
+                            kut_između_dpolpostrub_i_vdtt = \
+                                desna_polovica_postojeceg_ruba.u_vektor()\
+                                    .kut_izmedu_vektora(vektor_do_trenutne_točke)
 
                             if (kut_između_lpolpostrub_i_vdtt <
                                     kut_između_dpolpostrub_i_vdtt):
-                                tocan_dio_postojeceg_ruba = desna_polovica_postojeceg_ruba
+                                tocan_dio_postojeceg_ruba = \
+                                    desna_polovica_postojeceg_ruba
 
                             rubovi_pom.append(tocan_dio_postojeceg_ruba)
 
@@ -192,19 +195,22 @@ def voronoi(tocke):
                             desna_polovica_trenutna_simetrale = Duzina(
                                 sjeciste, trenutna_simetrala.B)
 
-                            trenutna_tocka_je_na_lijevoj_strani = trenutna_tocka.lijevo_od(
-                                tocan_dio_postojeceg_ruba)
+                            trenutna_tocka_je_na_lijevoj_strani = \
+                                trenutna_tocka.lijevo_od(
+                                    tocan_dio_postojeceg_ruba)
 
-                            lpoltrensim_pripada_poligonu = trenutna_simetrala.A.lijevo_od(
-                                tocan_dio_postojeceg_ruba)
+                            lpoltrensim_pripada_poligonu = \
+                                trenutna_simetrala.A.lijevo_od(
+                                    tocan_dio_postojeceg_ruba)
 
                             if (lpoltrensim_pripada_poligonu ==
                                     trenutna_tocka_je_na_lijevoj_strani):
-                                tocan_dio_trenutne_simetrale = lijeva_polovica_trenutne_simetrale
+                                tocan_dio_trenutne_simetrale = \
+                                    lijeva_polovica_trenutne_simetrale
 
                             else:
-                                tocan_dio_trenutne_simetrale = desna_polovica_trenutna_simetrale
-# 123456789012345678901234567890123456789012345678901234567890123456789012345678
+                                tocan_dio_trenutne_simetrale = \
+                                    desna_polovica_trenutna_simetrale
                         trenutna_simetrala = tocan_dio_trenutne_simetrale
 
                     elif not pronadeno_bar_jedno_sjeciste:
