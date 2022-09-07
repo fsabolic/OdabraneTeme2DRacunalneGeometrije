@@ -332,7 +332,7 @@ class Duzina:
 
         return False
 
-    def sjeciste(self, other):
+    def sjeciste(self, duzina):
         """Vraća sjecište dviju dužina.
 
         Parametri
@@ -346,27 +346,27 @@ class Duzina:
             se točka u kojoj se sijeku dviju dužine.
         """
         vektor_self = self.u_vektor()
-        vektor_other = other.u_vektor()
+        vektor_other = duzina.u_vektor()
         if vektor_self // vektor_other:
-            if other.A.pripada_duzini(self):
-                return other.A
-            elif other.B.pripada_duzini(self):
-                return other.B
-            elif self.A.pripada_duzini(other):
+            if duzina.A.pripada_duzini(self):
+                return duzina.A
+            elif duzina.B.pripada_duzini(self):
+                return duzina.B
+            elif self.A.pripada_duzini(duzina):
                 return self.A
-            elif self.B.pripada_duzini(other):
+            elif self.B.pripada_duzini(duzina):
                 return self.B
             else:
                 return Tocka(None, None)
 
-        t = ((self.A.x * (other.B.y - other.A.y)
-              + other.A.x * (self.A.y - other.B.y)
-              + other.B.x * (other.A.y - self.A.y))
+        t = ((self.A.x * (duzina.B.y - duzina.A.y)
+              + duzina.A.x * (self.A.y - duzina.B.y)
+              + duzina.B.x * (duzina.A.y - self.A.y))
              / (vektor_other.vektorski_produkt(vektor_self)))
 
-        s = ((self.A.x * (other.A.y - self.B.y)
-              + self.B.x * (self.A.y - other.A.y)
-              + other.A.x * (self.B.y - self.A.y))
+        s = ((self.A.x * (duzina.A.y - self.B.y)
+              + self.B.x * (self.A.y - duzina.A.y)
+              + duzina.A.x * (self.B.y - self.A.y))
              / (vektor_self.vektorski_produkt(vektor_other)))
 
         if 0 <= t <= 1 and 0 <= s <= 1:
